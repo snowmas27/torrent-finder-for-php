@@ -31,21 +31,21 @@ class Size
 		return $this->bytes;
 	}
 
-	public function getHumanSize($bytes, $decimals = 2): string
+	public function getHumanSize(): string
 	{
 		$minLengthMB = 1024 ** 2;
 		$minLengthGB = 1024 ** 3;
 
 		$unit = self::UNIT_MB;
-		if ($bytes < $minLengthMB) {
+		if ($this->bytes < $minLengthMB) {
 			$size = 0;
-		} elseif ($bytes >= $minLengthMB && $bytes < $minLengthGB) {
-			$size = $bytes / $minLengthMB;
+		} elseif ($this->bytes >= $minLengthMB && $this->bytes < $minLengthGB) {
+			$size = $this->bytes / $minLengthMB;
 		} else {
-			$size = $bytes / $minLengthGB;
+			$size = $this->bytes / $minLengthGB;
 			$unit = self::UNIT_GB;
 		}
-		$size = number_format($size, $decimals);
+		$size = number_format($size, 2);
 
 		return sprintf('%f %s', $size, $unit);
 	}
