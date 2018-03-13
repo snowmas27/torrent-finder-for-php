@@ -9,6 +9,7 @@ class ProvidersAvailable
 	const DEMONOID = 'demonoid';
 	const IDOPE = 'idope';
 	const MAGNET4YOU = 'magnet4you';
+    const EXTRATORRENT = 'extratorrent';
 
 	/**
 	 * @return Provider[]
@@ -21,6 +22,7 @@ class ProvidersAvailable
 			self::DEMONOID,
 			self::IDOPE,
 			self::MAGNET4YOU,
+            self::EXTRATORRENT,
 		];
 	}
 }

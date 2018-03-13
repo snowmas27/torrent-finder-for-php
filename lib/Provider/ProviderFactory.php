@@ -24,6 +24,9 @@ class ProviderFactory
 			case ProvidersAvailable::MAGNET4YOU:
 				return new Magnet4You();
 				break;
+            case ProvidersAvailable::EXTRATORRENT:
+                return new Extratorrent();
+                break;
 		}
 		throw new ProviderIsNotFound($name);
 	}
