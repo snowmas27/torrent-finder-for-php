@@ -22,10 +22,9 @@ class Magnet4You implements Provider
 		$this->searchUrl = 'https://magnet4you.me/search.php?s=%s&sort=seed';
 	}
 
-	public function search(SearchQueryBuilder $keywords, $seedsMini = 1): ProviderSearchResult
+	public function search(SearchQueryBuilder $keywords): ProviderSearchResult
 	{
-		$all = [];
-		$best = [];
+        $results = [];
 		$url = sprintf($this->searchUrl, $keywords->urlize());
 		try {
 			$crawler = $this->initDomCrawler($url);
@@ -48,15 +47,11 @@ class Magnet4You implements Provider
 					$currentSeeds,
 					$keywords->getFormat()
 				);
-				$all[] = new ProviderResult($this->name, $metaData, $size);
-				if ($currentSeeds < $seedsMini) {
-					continue;
-				}
-				$best[] = new ProviderResult($this->name, $metaData, $size);
+                $results[] = new ProviderResult($this->name, $metaData, $size);
 			}
 		} catch (\UnexpectedValueException $e) {
 		} catch (\InvalidArgumentException $e) {
 		}
-		return new ProviderSearchResult($this->name, $best, $all);
+		return new ProviderSearchResult($this->name, $results);
 	}
 }

@@ -22,10 +22,9 @@ class Extratorrent implements Provider
 		$this->name = ProvidersAvailable::EXTRATORRENT;
 		$this->searchUrl = 'https://extratorrent.cd/search/?search=%s&new=1&x=0&y=0';
 	}
-	public function search(SearchQueryBuilder $keywords, $seedsMini = 1): ProviderSearchResult
+	public function search(SearchQueryBuilder $keywords): ProviderSearchResult
 	{
-		$all = [];
-		$best = [];
+		$results = [];
 		$url = sprintf($this->searchUrl, $keywords->urlize());
 		/** @var Crawler $crawler */
 		$crawler = $this->initDomCrawler($url);
@@ -40,13 +39,9 @@ class Extratorrent implements Provider
                 $seeds,
 				$keywords->getFormat()
 			);
-			$all[] = new ProviderResult($this->name, $metaData, $size);
-			if ($seeds < $seedsMini) {
-				continue;
-			}
-			$best[] = new ProviderResult($this->name, $metaData, $size);
+            $results[] = new ProviderResult($this->name, $metaData, $size);
 		}
 
-		return new ProviderSearchResult($this->name, $best, $all);
+		return new ProviderSearchResult($this->name, $results);
 	}
 }

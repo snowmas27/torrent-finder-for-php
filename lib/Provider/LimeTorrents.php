@@ -22,10 +22,9 @@ class LimeTorrents implements Provider
 		$this->searchUrl = 'https://www.limetorrents.cc/searchrss/%s/';
 	}
 
-	public function search(SearchQueryBuilder $keywords, $seedsMini = 1): ProviderSearchResult
+	public function search(SearchQueryBuilder $keywords): ProviderSearchResult
 	{
-		$all = [];
-		$best = [];
+		$results = [];
 		$url = sprintf($this->searchUrl, $keywords->urlize());
 		$crawler = $this->initDomCrawler($url);
 		foreach ($crawler->filter('channel > item') as $item) {
@@ -44,13 +43,9 @@ class LimeTorrents implements Provider
 				$currentSeeds,
 				$keywords->getFormat()
 			);
-			$all[] = new ProviderResult($this->name, $metaData, $size);
-			if ($currentSeeds < $seedsMini) {
-				continue;
-			}
-			$best[] = new ProviderResult($this->name, $metaData, $size);
+            $results[] = new ProviderResult($this->name, $metaData, $size);
 		}
-		return new ProviderSearchResult($this->name, $best, $all);
+		return new ProviderSearchResult($this->name, $results);
 	}
 
 }

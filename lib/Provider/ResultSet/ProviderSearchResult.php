@@ -5,21 +5,18 @@ namespace TorrentFinder\Provider\ResultSet;
 class ProviderSearchResult
 {
 	private $providerName;
-	/** @var ProviderResult[] $best */
-	private $best;
-	/** @var ProviderResult[] $all */
-	private $all;
+	/** @var ProviderResult[] $results */
+	private $results;
 
 	public static function noResults(string $providerName): self
 	{
 		return new self($providerName, [], []);
 	}
 
-	public function __construct(string $providerName, array $best, array $all)
+	public function __construct(string $providerName, array $results)
 	{
 		$this->providerName = $providerName;
-		$this->best = $best;
-		$this->all = $all;
+		$this->results = $results;
 	}
 
 	public function getProviderName(): string
@@ -30,36 +27,18 @@ class ProviderSearchResult
 	/**
 	 * @return ProviderResult[]
 	 */
-	public function getBest(): array
+	public function getResults(): array
 	{
-		return $this->best;
+		return $this->results;
 	}
 
-	/**
-	 * @return ProviderResult[]
-	 */
-	public function getAll(): array
+	public function countResults(): int
 	{
-		return $this->all;
+		return count($this->results);
 	}
 
-	public function countBest(): int
+	public function hasResults(): bool
 	{
-		return count($this->best);
-	}
-
-	public function countAll(): int
-	{
-		return count($this->all);
-	}
-
-	public function hasBestResults(): bool
-	{
-		return count($this->best) > 0;
-	}
-
-	public function hasAnyResults(): bool
-	{
-		return count($this->all) > 0;
+		return count($this->results) > 0;
 	}
 }

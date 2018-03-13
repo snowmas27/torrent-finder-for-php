@@ -21,10 +21,9 @@ class Zooqle implements Provider
 		$this->name = ProvidersAvailable::ZOOQLE;
 		$this->searchUrl = 'https://zooqle.com/search?q=%s&fmt=rss';
 	}
-	public function search(SearchQueryBuilder $keywords, $seedsMini = 1): ProviderSearchResult
+	public function search(SearchQueryBuilder $keywords): ProviderSearchResult
 	{
-		$all = [];
-		$best = [];
+        $results = [];
 		$url = sprintf($this->searchUrl, $keywords->urlize());
 		/** @var Crawler $crawler */
 		$crawler = $this->initDomCrawler($url);
@@ -40,13 +39,9 @@ class Zooqle implements Provider
 				$seeds,
 				$keywords->getFormat()
 			);
-			$all[] = new ProviderResult($this->name, $metaData, $size);
-			if ($seeds < $seedsMini) {
-				continue;
-			}
-			$best[] = new ProviderResult($this->name, $metaData, $size);
+            $results[] = new ProviderResult($this->name, $metaData, $size);
 		}
 
-		return new ProviderSearchResult($this->name, $best, $all);
+		return new ProviderSearchResult($this->name, $results);
 	}
 }

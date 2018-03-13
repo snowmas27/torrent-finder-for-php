@@ -23,50 +23,54 @@ class SearchResults
 	/**
 	 * @return ProviderResult[]
 	 */
-	public function getBestResults(): array
+	public function getResults(): array
 	{
-		$best = [];
+		$results = [];
 		foreach ($this->results as $result) {
-			foreach ($result->getBest() as $providerBest) {
-				$best[] = new ProviderResult($providerBest->getProvider(), $providerBest->getTorrentMetaData(), $providerBest->getSize());
+			foreach ($result->getResults() as $providerResult) {
+				$results[] = new ProviderResult($providerResult->getProvider(), $providerResult->getTorrentMetaData(), $providerResult->getSize());
 			}
 		}
-		usort($best, function(ProviderResult $a, ProviderResult $b) {
-			return $a->getTorrentMetaData()->getSeeds() < $b->getTorrentMetaData()->getSeeds();
-		});
 
-		return $best;
+		return $this->sortBySeeds($results);
 	}
 
-	/**
-	 * @return ProviderResult[]
-	 */
-	public function getAllResults(): array
-	{
-		$all = [];
-		foreach ($this->results as $result) {
-			foreach ($result->getAll() as $providerBest) {
-				$all[] = new ProviderResult($providerBest->getProvider(), $providerBest->getTorrentMetaData(), $providerBest->getSize());
-			}
-		}
-		usort($all, function(ProviderResult $a, ProviderResult $b) {
-			return $a->getTorrentMetaData()->getSeeds() < $b->getTorrentMetaData()->getSeeds();
-		});
+	public function getResultsWithSeedsGreaterThan(int $seeds): array
+    {
+        $results = [];
+        foreach ($this->results as $result) {
+            foreach ($result->getResults() as $providerResult) {
+                if ($providerResult->getTorrentMetaData()->getSeeds() < $seeds) {
+                    continue;
+                }
+                $results[] = new ProviderResult($providerResult->getProvider(), $providerResult->getTorrentMetaData(), $providerResult->getSize());
+            }
+        }
 
-		return $all;
-	}
+        return $this->sortBySeeds($results);
+    }
 
 	public function getSummary(): SearchResultSummary
 	{
 		return $this->summary;
 	}
 
+	private function sortBySeeds(array $results): array
+    {
+        usort($results, function(ProviderResult $a, ProviderResult $b) {
+            return $a->getTorrentMetaData()->getSeeds() < $b->getTorrentMetaData()->getSeeds();
+        });
+
+        return $results;
+    }
+
 	private function updateSummary()
 	{
 		$score = [];
-		$bestResults = $this->getBestResults();
+		$bestResults = $this->getResults();
 		foreach ($bestResults as $result) {
-			$score[$result->getProvider()] = !isset($score[$result->getProvider()]) ? 1 : $score[$result->getProvider()] + 1;
+		    $providerName = $result->getProvider();
+			$score[$providerName] = !isset($score[$providerName]) ? 1 : $score[$providerName] + 1;
 		}
 
 		$resultsFoundSummaryByProvider = [];
