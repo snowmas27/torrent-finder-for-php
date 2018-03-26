@@ -22,7 +22,7 @@ class Magnet4You implements Provider
 		$this->searchUrl = 'https://magnet4you.me/search.php?s=%s&sort=seed';
 	}
 
-	public function search(SearchQueryBuilder $keywords): ProviderSearchResult
+	public function search(SearchQueryBuilder $keywords): array
 	{
         $results = [];
 		$url = sprintf($this->searchUrl, $keywords->urlize());
@@ -52,6 +52,6 @@ class Magnet4You implements Provider
 		} catch (\UnexpectedValueException $e) {
 		} catch (\InvalidArgumentException $e) {
 		}
-		return new ProviderSearchResult($this->name, $results);
+		return $results;
 	}
 }

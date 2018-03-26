@@ -21,7 +21,7 @@ class Zooqle implements Provider
 		$this->name = ProvidersAvailable::ZOOQLE;
 		$this->searchUrl = 'https://zooqle.com/search?q=%s&fmt=rss';
 	}
-	public function search(SearchQueryBuilder $keywords): ProviderSearchResult
+	public function search(SearchQueryBuilder $keywords): array
 	{
         $results = [];
 		$url = sprintf($this->searchUrl, $keywords->urlize());
@@ -42,6 +42,6 @@ class Zooqle implements Provider
             $results[] = new ProviderResult($this->name, $metaData, $size);
 		}
 
-		return new ProviderSearchResult($this->name, $results);
+		return $results;
 	}
 }

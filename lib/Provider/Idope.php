@@ -22,7 +22,7 @@ class Idope implements Provider
 		$this->searchUrl = 'https://idope.se/torrent-list/%s';
 	}
 
-	public function search(SearchQueryBuilder $keywords): ProviderSearchResult
+	public function search(SearchQueryBuilder $keywords): array
 	{
 		$results = [];
 		$url = sprintf($this->searchUrl, $keywords->urlize());
@@ -50,7 +50,7 @@ class Idope implements Provider
 			);
             $results[] = new ProviderResult($this->name, $metaData, $size);
 		}
-		return new ProviderSearchResult($this->name, $results);
+		return $results;
 	}
 
 }

@@ -24,7 +24,7 @@ class Demonoid implements Provider
 		$this->baseUrl = 'https://www.demonoid.pw';
 	}
 
-	public function search(SearchQueryBuilder $keywords): ProviderSearchResult
+	public function search(SearchQueryBuilder $keywords): array
 	{
         $results = [];
 		$url = sprintf($this->searchUrl, $keywords->urlize());
@@ -60,7 +60,7 @@ class Demonoid implements Provider
 				$tdList = '';
 			}
 		}
-		return new ProviderSearchResult($this->name, $results);
+		return $results;
 	}
 
 }

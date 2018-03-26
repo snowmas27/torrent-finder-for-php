@@ -25,12 +25,13 @@ class SearchOnProviders
 		$this->providersName = $providersName;
 	}
 
-	public function search(SearchQueryBuilder $searchQueryBuilder, $seedsMini = 1): SearchResults
+	public function search(SearchQueryBuilder $searchQueryBuilder): SearchResults
 	{
-		$searchResults = new SearchResults();
+		$searchResults = [];
 		foreach ($this->providersName as $name) {
-			$searchResults->add(ProviderFactory::buildFromName($name)->search($searchQueryBuilder, $seedsMini));
+			$searchResults = array_merge($searchResults, ProviderFactory::buildFromName($name)->search($searchQueryBuilder));
 		}
+		$searchResults = new SearchResults($searchResults);
 
 		return $searchResults;
 	}

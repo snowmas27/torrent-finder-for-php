@@ -18,12 +18,12 @@ class Resolution
 
 	public static function hd(): self
 	{
-		return new static(self::FULL_HD);
+		return new static(self::HD);
 	}
 
 	public static function ld(): self
 	{
-		return new static(self::FULL_HD);
+		return new static(self::LD);
 	}
 
 	public function __construct(string $value)

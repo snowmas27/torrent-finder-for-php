@@ -12,9 +12,6 @@ class ProviderFactory
 			case ProvidersAvailable::ZOOQLE:
 				return new Zooqle();
 				break;
-			case ProvidersAvailable::DEMONOID:
-				return new Demonoid();
-				break;
 			case ProvidersAvailable::LIMETORRENTS:
 				return new LimeTorrents();
 				break;
@@ -27,6 +24,12 @@ class ProviderFactory
             case ProvidersAvailable::EXTRATORRENT:
                 return new Extratorrent();
                 break;
+			case ProvidersAvailable::TORRENTDOWNLOAD:
+				return new TorrentDownload();
+				break;
+			case ProvidersAvailable::DEMONOID:
+				return new Demonoid();
+				break;
 		}
 		throw new ProviderIsNotFound($name);
 	}
