@@ -30,14 +30,16 @@ $query = SearchQuery::movie('Wonder Woman', 2017);
 $searchKeywords = new SearchQueryBuilder($query, Resolution::fullHd());
 
 // Searching on all providers
-$torrents = SearchOnProviders::all()->search($searchKeywords);
+$results = SearchOnProviders::all()->search($searchKeywords);
 
 // or specifics ones
 $providers = [
 	ProvidersAvailable::ZOOQLE,
 	ProvidersAvailable::MAGNET4YOU,
 ];
-$torrents = SearchOnProviders::specificProviders($providers)->search($searchKeywords);
+$results = SearchOnProviders::specificProviders($providers)->search($searchKeywords);
+// List torrents information found
+$results->getResults();
 
 ```
 
@@ -49,15 +51,16 @@ $query = SearchQuery::tvShowEpisode('Game Of Thrones', 2, 6);
 $searchKeywords = new SearchQueryBuilder($query, Resolution::fullHd());
 
 // Searching on all providers
-$torrents = SearchOnProviders::all()->search($searchKeywords);
+$results = SearchOnProviders::all()->search($searchKeywords);
 
 // or specifics ones
 $providers = [
 	ProvidersAvailable::ZOOQLE,
 	ProvidersAvailable::MAGNET4YOU,
 ];
-$torrents = SearchOnProviders::specificProviders($providers)->search($searchKeywords);
-
+$results = SearchOnProviders::specificProviders($providers)->search($searchKeywords);
+// List torrents information found
+$results->getResults();
 ```
 
 Torrents found are automatically sorted by seeds with additional information. 
