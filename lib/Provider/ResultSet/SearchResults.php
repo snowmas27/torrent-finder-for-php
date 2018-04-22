@@ -22,6 +22,9 @@ class SearchResults
 		return $this->sortBySeeds($this->results);
 	}
 
+	/**
+	 * @return ProviderResult[]
+	 */
 	public function getResultsWithSeedsGreaterThan(int $seeds): array
     {
         $results = [];
@@ -40,6 +43,9 @@ class SearchResults
 		return $this->summary;
 	}
 
+	/**
+	 * @return ProviderResult[]
+	 */
 	private function sortBySeeds(array $results): array
     {
         usort($results, function(ProviderResult $a, ProviderResult $b) {
