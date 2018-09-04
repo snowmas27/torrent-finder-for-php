@@ -20,7 +20,7 @@ class SearchQuery
 		return new self(sprintf('%s S%02dE%02d', $tvShowName, $seasonNumber, $episodeNumber));
 	}
 
-	private function __construct(string $query)
+	public function __construct(string $query)
 	{
 		$this->title = $this->escapeUnWantedCharacters($query);
 	}

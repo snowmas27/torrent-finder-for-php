@@ -29,7 +29,11 @@ class SearchOnProviders
 	{
 		$searchResults = [];
 		foreach ($this->providersName as $name) {
-			$searchResults = array_merge($searchResults, ProviderFactory::buildFromName($name)->search($searchQueryBuilder));
+			try {
+				$searchResults = array_merge($searchResults, ProviderFactory::buildFromName($name)->search($searchQueryBuilder));
+			} catch (\Exception $e) {
+				printf("%s\n", $e->getMessage());
+			}
 		}
 		$searchResults = new SearchResults($searchResults);
 

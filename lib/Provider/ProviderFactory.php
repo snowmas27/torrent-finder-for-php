@@ -15,9 +15,6 @@ class ProviderFactory
 			case ProvidersAvailable::LIMETORRENTS:
 				return new LimeTorrents();
 				break;
-			case ProvidersAvailable::IDOPE:
-				return new Idope();
-				break;
 			case ProvidersAvailable::MAGNET4YOU:
 				return new Magnet4You();
 				break;

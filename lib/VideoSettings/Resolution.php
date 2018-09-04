@@ -6,10 +6,16 @@ use TorrentFinder\Exception\UnsupportedVideoResolution;
 
 class Resolution
 {
-	private $value;
 	const FULL_HD = '1080p';
 	const HD = '720p';
 	const LD = '480p';
+    const RESOLUTIONS = [
+        self::FULL_HD,
+        self::HD,
+        self::LD,
+    ];
+
+	private $value;
 
 	public static function fullHd(): self
 	{
@@ -57,4 +63,9 @@ class Resolution
 	{
 		return $this->value === self::LD;
 	}
+
+	public static function getResolutions(): array
+    {
+        return self::RESOLUTIONS;
+    }
 }

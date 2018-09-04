@@ -6,7 +6,6 @@ class ProvidersAvailable
 {
 	const ZOOQLE = 'zooqle';
 	const LIMETORRENTS = 'limetorrents';
-	const IDOPE = 'idope';
 	const MAGNET4YOU = 'magnet4you';
     const EXTRATORRENT = 'extratorrent';
 	const TORRENTDOWNLOAD = 'torrentdownload';
@@ -20,11 +19,10 @@ class ProvidersAvailable
 		return [
 			self::LIMETORRENTS,
 			self::ZOOQLE,
-			self::IDOPE,
 			self::MAGNET4YOU,
             self::EXTRATORRENT,
 			self::TORRENTDOWNLOAD,
-			self::DEMONOID,
+//			self::DEMONOID,
 		];
 	}
 }
