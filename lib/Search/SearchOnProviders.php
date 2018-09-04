@@ -2,6 +2,7 @@
 
 namespace TorrentFinder\Search;
 
+use TorrentFinder\Exception\Ensure;
 use TorrentFinder\Provider\ProviderFactory;
 use TorrentFinder\Provider\ProvidersAvailable;
 use TorrentFinder\Provider\ResultSet\SearchResults;
@@ -25,16 +26,22 @@ class SearchOnProviders
 		$this->providersName = $providersName;
 	}
 
-	public function search(SearchQueryBuilder $searchQueryBuilder): SearchResults
+    /**
+     * @param SearchQueryBuilder[] $queryBuilders
+     */
+	public function search(array $queryBuilders): SearchResults
 	{
+	    Ensure::allIsInstanceOf($queryBuilders, SearchQueryBuilder::class);
 		$searchResults = [];
-		foreach ($this->providersName as $name) {
-			try {
-				$searchResults = array_merge($searchResults, ProviderFactory::buildFromName($name)->search($searchQueryBuilder));
-			} catch (\Exception $e) {
-				printf("%s\n", $e->getMessage());
-			}
-		}
+		foreach ($queryBuilders as $queryBuilder) {
+            foreach ($this->providersName as $name) {
+                try {
+                    $searchResults = array_merge($searchResults, ProviderFactory::buildFromName($name)->search($queryBuilder));
+                } catch (\Exception $e) {
+                    printf("%s\n", $e->getMessage());
+                }
+            }
+        }
 		$searchResults = new SearchResults($searchResults);
 
 		return $searchResults;

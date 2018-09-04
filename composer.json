@@ -10,7 +10,8 @@
         "symfony/dom-crawler": "^3.4",
         "symfony/var-dumper": "^3.4",
         "symfony/css-selector": "^3.4",
-        "matriphe/iso-639": "^1.2"
+        "matriphe/iso-639": "^1.2",
+        "beberlei/assert": "^3.0"
     },
     "autoload": {
         "psr-4": {
