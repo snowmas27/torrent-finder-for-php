@@ -2,6 +2,7 @@
 
 namespace TorrentFinder\VideoSettings;
 
+use TorrentFinder\Exception\Ensure;
 use TorrentFinder\Exception\UnsupportedVideoResolution;
 
 class Resolution
@@ -34,9 +35,8 @@ class Resolution
 
 	public function __construct(string $value)
 	{
-		if ($value !== self::FULL_HD && $value !== self::HD && $value !== self::LD) {
-			throw new UnsupportedVideoResolution($value);
-		}
+		Ensure::inArray($value, self::RESOLUTIONS);
+
 		$this->value = $value;
 	}
 
@@ -54,14 +54,19 @@ class Resolution
 		return $this->value;
 	}
 
+	public function isFullHD(): bool
+    {
+        return self::FULL_HD === $this->value;
+    }
+
 	public function isHD(): bool
 	{
-		return $this->value === self::FULL_HD || $this->value === self::HD;
+		return self::HD === $this->value;
 	}
 
 	public function isLD(): bool
 	{
-		return $this->value === self::LD;
+		return self::LD === $this->value;
 	}
 
 	public static function getResolutions(): array
