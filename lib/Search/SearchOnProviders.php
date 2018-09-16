@@ -36,7 +36,7 @@ class SearchOnProviders
 		foreach ($queryBuilders as $queryBuilder) {
             foreach ($this->providersName as $name) {
                 try {
-                    $searchResults = array_merge($searchResults, ProviderFactory::buildFromName($name)->search($queryBuilder));
+                    $searchResults = array_merge($searchResults, $results = ProviderFactory::buildFromName($name)->search($queryBuilder));
                 } catch (\Exception $e) {
                     printf("%s\n", $e->getMessage());
                 }

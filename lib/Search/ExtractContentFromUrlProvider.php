@@ -16,7 +16,8 @@ trait ExtractContentFromUrlProvider
 		return new Crawler($content);
 	}
 
-	private function fileGetContentsCurl(string $url) {
+	private function fileGetContentsCurl(string $url)
+    {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.

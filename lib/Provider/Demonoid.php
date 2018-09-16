@@ -33,11 +33,11 @@ class Demonoid implements Provider
 		/** @var \DOMElement $domElement */
 		foreach ($crawler->filterXPath('//table[17]/tr') as $domElement) {
 			$crawlerListResult = new Crawler($domElement);
-			if ($crawlerListResult->filter('td')->count() === 2
-				|| $crawlerListResult->filter('td')->count() === 8) {
+			if (2 === $crawlerListResult->filter('td')->count()
+				|| 7 === $crawlerListResult->filter('td')->count()) {
 				$tdList .= $crawlerListResult->html();
 			}
-			if ($crawlerListResult->filter('td')->count() === 8) {
+			if (7 === $crawlerListResult->filter('td')->count()) {
 				$crawlerTdList = new Crawler($tdList);
 				$title = $crawlerTdList->filterXPath('//td[2]')->text();
 				$torrent = $crawlerTdList->filterXPath('//td[5]/a/@href')->text();

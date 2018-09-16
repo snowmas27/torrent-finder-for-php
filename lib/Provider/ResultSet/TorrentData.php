@@ -47,6 +47,12 @@ class TorrentData
 		if (empty($this->title) && empty($this->url) && empty($this->magnetURI) && $this->seeds === 0) {
 			return true;
 		}
+
 		return false;
 	}
+
+	public function hasMoreSeedsThan(TorrentData $torrentData): bool
+    {
+        return $this->seeds > $torrentData->getSeeds();
+    }
 }

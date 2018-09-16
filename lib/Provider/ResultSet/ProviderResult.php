@@ -36,4 +36,13 @@ class ProviderResult
 	{
 		return !$this->torrentMetaData->isEmpty();
 	}
+
+	public function hasMoreSeedsThan(ProviderResult $providerResult): bool
+    {
+        if (!$this->hasResult()) {
+            return false;
+        }
+
+        return $this->getTorrentMetaData()->hasMoreSeedsThan($providerResult->getTorrentMetaData());
+    }
 }
