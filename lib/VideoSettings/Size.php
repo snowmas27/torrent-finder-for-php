@@ -18,6 +18,7 @@ class Size
 			throw new \UnexpectedValueException($humanSize);
 		}
 		Ensure::sizeUnitAllowed($match[2]);
+
 		return new static(self::convertToBytes($match[1], $match[2]));
 	}
 
@@ -26,7 +27,7 @@ class Size
 		$this->bytes = $bytes;
 	}
 
-	public function getBytes(): int
+	public function getBytes(): float
 	{
 		return $this->bytes;
 	}
@@ -60,9 +61,9 @@ class Size
 		return $this->bytes < $size->getBytes();
 	}
 
-	public function isBetween(Size $min, Size $max): bool
+	public function isBetween(SizeRange $sizeRange): bool
 	{
-		return $this->isBiggerThan($min) && $this->isSmallerThan($max);
+		return $sizeRange->inRange(new Size($this->bytes));
 	}
 
 	private function convertToBytes(float $value, string $unit): float
