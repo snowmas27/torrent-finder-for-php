@@ -15,6 +15,11 @@ class Resolution
         self::HD,
         self::LD,
     ];
+    const RESOLUTION_QUALITY_MAP = [
+        self::FULL_HD => 3,
+        self::HD => 2,
+        self::LD => 1,
+    ];
 
 	private $value;
 
@@ -68,6 +73,11 @@ class Resolution
 	{
 		return self::LD === $this->value;
 	}
+
+	public function isHigherThan(Resolution $other): bool
+    {
+        return self::RESOLUTION_QUALITY_MAP[$this->value] > self::RESOLUTION_QUALITY_MAP[$other->getValue()];
+    }
 
 	public static function getResolutions(): array
     {
