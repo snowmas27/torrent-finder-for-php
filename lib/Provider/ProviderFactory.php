@@ -27,7 +27,11 @@ class ProviderFactory
 			case ProvidersAvailable::DEMONOID:
 				return new Demonoid();
 				break;
+            case ProvidersAvailable::EZTV:
+                return new EzTv();
+                break;
 		}
+		
 		throw new ProviderIsNotFound($name);
 	}
 }
