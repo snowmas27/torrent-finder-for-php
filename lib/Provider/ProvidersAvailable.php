@@ -11,6 +11,7 @@ class ProvidersAvailable
 	const TORRENTDOWNLOAD = 'torrentdownload';
 	const DEMONOID = 'demonoid';
     const EZTV = 'eztv';
+    const NYAA = 'nyaa';
 
 	/**
 	 * @return Provider[]
@@ -25,6 +26,7 @@ class ProvidersAvailable
 			self::TORRENTDOWNLOAD,
 //			self::DEMONOID,
             self::EZTV,
+            self::NYAA,
 		];
 	}
 }

@@ -30,6 +30,9 @@ class ProviderFactory
             case ProvidersAvailable::EZTV:
                 return new EzTv();
                 break;
+            case ProvidersAvailable::NYAA:
+                return new Nyaa();
+                break;
 		}
 		
 		throw new ProviderIsNotFound($name);
