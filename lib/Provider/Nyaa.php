@@ -20,7 +20,6 @@ class Nyaa implements Provider
 	{
 		$this->name = ProvidersAvailable::NYAA;
 		$this->searchUrl = 'https://nyaa.si/?f=0&c=1_0&q=%s&s=seeders&o=desc';
-		$this->baseUrl = 'https://nyaa.si';
 	}
 
 	public function search(SearchQueryBuilder $keywords): array
