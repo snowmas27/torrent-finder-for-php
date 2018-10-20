@@ -6,7 +6,9 @@ Torrent finder for PHP is a movie and TvShow search engine based on various torr
 * Idope
 * Extratorrent
 * Torrentdownload
-* Demonoid
+* EzTV
+* ETTV
+* Nyaa
 
 New providers will be added later.
 

@@ -9,8 +9,8 @@ class ProvidersAvailable
 	const MAGNET4YOU = 'magnet4you';
     const EXTRATORRENT = 'extratorrent';
 	const TORRENTDOWNLOAD = 'torrentdownload';
-	const DEMONOID = 'demonoid';
     const EZTV = 'eztv';
+    const ETTV = 'ettv';
     const NYAA = 'nyaa';
 
 	/**
@@ -24,8 +24,8 @@ class ProvidersAvailable
 			self::MAGNET4YOU,
             self::EXTRATORRENT,
 			self::TORRENTDOWNLOAD,
-//			self::DEMONOID,
             self::EZTV,
+            self::ETTV,
             self::NYAA,
 		];
 	}

@@ -24,14 +24,14 @@ class ProviderFactory
 			case ProvidersAvailable::TORRENTDOWNLOAD:
 				return new TorrentDownload();
 				break;
-			case ProvidersAvailable::DEMONOID:
-				return new Demonoid();
-				break;
             case ProvidersAvailable::EZTV:
                 return new EzTv();
                 break;
             case ProvidersAvailable::NYAA:
                 return new Nyaa();
+                break;
+            case ProvidersAvailable::ETTV:
+                return new Ettv();
                 break;
 		}
 		
