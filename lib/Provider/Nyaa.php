@@ -28,7 +28,7 @@ class Nyaa implements Provider
 		$url = sprintf($this->searchUrl, $keywords->urlize());
 		$crawler = $this->initDomCrawler($url);
 		/** @var \DOMElement $domElement */
-        foreach ($crawler->filter('table.torrent-list')->filter('tr.success') as $item) {
+        foreach ($crawler->filter('table.torrent-list')->filter('tr.default') as $item) {
             $itemCrawler = new Crawler($item);
             $td = $itemCrawler->filter('td');
             $index = 2 === $td->eq(1)->filter('a')->count() ? 1 : 0;
