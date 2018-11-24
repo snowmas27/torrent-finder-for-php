@@ -3,12 +3,12 @@ Torrent finder for PHP is a movie and TvShow search engine based on various torr
 * Zooqle
 * Lime torrents
 * Magnet4You
-* Idope
 * Extratorrent
 * Torrentdownload
 * EzTV
 * ETTV
 * Nyaa
+* BTDB
 
 New providers will be added later.
 
@@ -32,14 +32,18 @@ $query = SearchQuery::movie('Wonder Woman', 2017);
 $searchKeywords = new SearchQueryBuilder($query, Resolution::fullHd());
 
 // Searching on all providers
-$results = SearchOnProviders::all()->search($searchKeywords);
+$results = SearchOnProviders::all()->search([
+    $searchKeywords
+]);
 
 // or specifics ones
 $providers = [
 	ProvidersAvailable::ZOOQLE,
 	ProvidersAvailable::MAGNET4YOU,
 ];
-$results = SearchOnProviders::specificProviders($providers)->search($searchKeywords);
+$results = SearchOnProviders::specificProviders($providers)->search([
+    $searchKeywords
+]);
 // List torrents information found
 $results->getResults();
 
@@ -53,14 +57,18 @@ $query = SearchQuery::tvShowEpisode('Game Of Thrones', 2, 6);
 $searchKeywords = new SearchQueryBuilder($query, Resolution::fullHd());
 
 // Searching on all providers
-$results = SearchOnProviders::all()->search($searchKeywords);
+$results = SearchOnProviders::all()->search([
+    $searchKeywords
+]);
 
 // or specifics ones
 $providers = [
 	ProvidersAvailable::ZOOQLE,
 	ProvidersAvailable::MAGNET4YOU,
 ];
-$results = SearchOnProviders::specificProviders($providers)->search($searchKeywords);
+$results = SearchOnProviders::specificProviders($providers)->search([
+    $searchKeywords
+]);
 // List torrents information found
 $results->getResults();
 ```

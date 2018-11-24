@@ -33,6 +33,9 @@ class ProviderFactory
             case ProvidersAvailable::ETTV:
                 return new Ettv();
                 break;
+            case ProvidersAvailable::BTDB:
+                return new Btdb();
+                break;
 		}
 		
 		throw new ProviderIsNotFound($name);

@@ -12,6 +12,7 @@ class ProvidersAvailable
     const EZTV = 'eztv';
     const ETTV = 'ettv';
     const NYAA = 'nyaa';
+    const BTDB = 'btdb';
 
 	/**
 	 * @return Provider[]
@@ -27,6 +28,7 @@ class ProvidersAvailable
             self::EZTV,
             self::ETTV,
             self::NYAA,
+            self::BTDB,
 		];
 	}
 }

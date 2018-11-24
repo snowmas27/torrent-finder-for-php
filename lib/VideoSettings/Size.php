@@ -66,7 +66,7 @@ class Size
 		return $sizeRange->inRange(new Size($this->bytes));
 	}
 
-	private function convertToBytes(float $value, string $unit): float
+	private static function convertToBytes(float $value, string $unit): float
 	{
 		if ($unit === self::UNIT_KB) {
 			return $value * 1024 ** 1;
