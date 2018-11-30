@@ -5,7 +5,6 @@ Torrent finder for PHP is a movie and TvShow search engine based on various torr
 * Magnet4You
 * Extratorrent
 * Torrentdownload
-* EzTV
 * ETTV
 * Nyaa
 * BTDB

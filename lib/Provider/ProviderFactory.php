@@ -24,9 +24,6 @@ class ProviderFactory
 			case ProvidersAvailable::TORRENTDOWNLOAD:
 				return new TorrentDownload();
 				break;
-            case ProvidersAvailable::EZTV:
-                return new EzTv();
-                break;
             case ProvidersAvailable::NYAA:
                 return new Nyaa();
                 break;
