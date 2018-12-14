@@ -9,6 +9,7 @@ trait ExtractContentFromUrlProvider
 	public function initDomCrawler(string $url): Crawler
 	{
 		$content = $this->fileGetContentsCurl($url);
+
 		if (false === $content) {
 			throw new \UnexpectedValueException("$url is unreachable");
 		}

@@ -4,11 +4,9 @@ namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
-use TorrentFinder\Provider\ResultSet\ProviderSearchResult;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\ExtractContentFromUrlProvider;
 use TorrentFinder\Search\SearchQueryBuilder;
-use TorrentFinder\VideoSettings\Size;
 use TorrentFinder\VideoSettings\SizeFactory;
 
 class Extratorrent implements Provider
@@ -22,6 +20,7 @@ class Extratorrent implements Provider
 		$this->name = ProvidersAvailable::EXTRATORRENT;
 		$this->searchUrl = 'https://extratorrent.si/search/?search=%s&new=1&x=0&y=0';
 	}
+
 	public function search(SearchQueryBuilder $keywords): array
 	{
 		$results = [];

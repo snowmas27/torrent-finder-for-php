@@ -14,6 +14,7 @@ class Size
 	public static function fromHumanSize(string $humanSize): self
 	{
 		preg_match(sprintf('/([\d\.]+).*(%s|%s|%s)/', self::UNIT_MB, self::UNIT_KB, self::UNIT_GB), $humanSize, $match);
+
 		if (!isset($match[1])) {
 			throw new \UnexpectedValueException($humanSize);
 		}
@@ -48,7 +49,7 @@ class Size
 		}
 		$size = number_format($size, 2);
 
-		return sprintf('%f %s', $size, $unit);
+		return sprintf('%02f %s', $size, $unit);
 	}
 
 	public function isBiggerThan(Size $size): bool
@@ -71,9 +72,11 @@ class Size
 		if ($unit === self::UNIT_KB) {
 			return $value * 1024 ** 1;
 		}
+
 		if ($unit === self::UNIT_MB) {
 			return $value * 1024 ** 2;
 		}
+
 		if ($unit === self::UNIT_GB) {
 			return $value * 1024 ** 3;
 		}

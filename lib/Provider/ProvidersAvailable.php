@@ -12,6 +12,8 @@ class ProvidersAvailable
     const ETTV = 'ettv';
     const NYAA = 'nyaa';
     const BTDB = 'btdb';
+    const SEEDPEER = 'seedpeer';
+    const TORRENTGALAXY = 'torrentgalaxy';
 
 	/**
 	 * @return Provider[]
@@ -27,6 +29,8 @@ class ProvidersAvailable
             self::ETTV,
             self::NYAA,
             self::BTDB,
+            self::SEEDPEER,
+            self::TORRENTGALAXY,
 		];
 	}
 }

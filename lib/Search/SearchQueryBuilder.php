@@ -40,9 +40,9 @@ class SearchQueryBuilder
 		$this->version = $iso->languageByCode1($languageIsoCode);
 	}
 
-	public function urlize(): string
+	public function urlize(string $char = '+'): string
 	{
-		return str_replace(' ', '+', $this->getSearchKeywords());
+		return str_replace(' ', $char, $this->getSearchKeywords());
 	}
 
 	public function urlEncode(): string
