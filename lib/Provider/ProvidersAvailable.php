@@ -14,6 +14,7 @@ class ProvidersAvailable
     const BTDB = 'btdb';
     const SEEDPEER = 'seedpeer';
     const TORRENTGALAXY = 'torrentgalaxy';
+    const PROVIDER1333X = '1333x';
 
 	/**
 	 * @return Provider[]
@@ -31,6 +32,7 @@ class ProvidersAvailable
             self::BTDB,
             self::SEEDPEER,
             self::TORRENTGALAXY,
+            self::PROVIDER1333X,
 		];
 	}
 }

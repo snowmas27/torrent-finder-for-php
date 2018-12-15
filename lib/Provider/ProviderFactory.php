@@ -29,6 +29,8 @@ class ProviderFactory
                 return new SeedPeer();
             case ProvidersAvailable::TORRENTGALAXY:
                 return new TorrentGalaxy();
+            case ProvidersAvailable::PROVIDER1333X:
+                return new Provider1337x();
         }
 		
 		throw new ProviderIsNotFound($name);
