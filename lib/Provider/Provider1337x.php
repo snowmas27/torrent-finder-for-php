@@ -29,7 +29,7 @@ class Provider1337x implements Provider
 		$results = [];
 		$url = sprintf($this->searchUrl, $keywords->urlize());
 		$crawler = $this->initDomCrawler($url);
-		
+
 		foreach ($crawler->filter('div.table-list-wrap')->filter('tbody > tr') as $item) {
 			$crawlerResultList = new Crawler($item);
             $td = $crawlerResultList->filter('td');

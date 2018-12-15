@@ -15,6 +15,7 @@ class ProvidersAvailable
     const SEEDPEER = 'seedpeer';
     const TORRENTGALAXY = 'torrentgalaxy';
     const PROVIDER1333X = '1333x';
+    const ANIMEOSHO = 'animetosho';
 
 	/**
 	 * @return Provider[]
@@ -33,6 +34,7 @@ class ProvidersAvailable
             self::SEEDPEER,
             self::TORRENTGALAXY,
             self::PROVIDER1333X,
+            self::ANIMEOSHO,
 		];
 	}
 }

@@ -31,6 +31,8 @@ class ProviderFactory
                 return new TorrentGalaxy();
             case ProvidersAvailable::PROVIDER1333X:
                 return new Provider1337x();
+            case ProvidersAvailable::ANIMEOSHO:
+                return new Animetosho();
         }
 		
 		throw new ProviderIsNotFound($name);
