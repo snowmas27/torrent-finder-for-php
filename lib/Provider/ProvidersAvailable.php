@@ -9,7 +9,6 @@ class ProvidersAvailable
 	const MAGNET4YOU = 'magnet4you';
     const EXTRATORRENT = 'extratorrent';
 	const TORRENTDOWNLOAD = 'torrentdownload';
-    const ETTV = 'ettv';
     const NYAA = 'nyaa';
     const BTDB = 'btdb';
     const SEEDPEER = 'seedpeer';
@@ -28,7 +27,6 @@ class ProvidersAvailable
 			self::MAGNET4YOU,
             self::EXTRATORRENT,
 			self::TORRENTDOWNLOAD,
-            self::ETTV,
             self::NYAA,
             self::BTDB,
             self::SEEDPEER,
