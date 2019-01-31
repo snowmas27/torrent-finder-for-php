@@ -7,21 +7,30 @@ use TorrentFinder\Exception\UnsupportedVideoResolution;
 
 class Resolution
 {
-	const FULL_HD = '1080p';
-	const HD = '720p';
-	const LD = '480p';
+    const ULTRA_HD = '2160p';
+    const FULL_HD = '1080p';
+    const HD = '720p';
+    const LD = '480p';
+
     const RESOLUTIONS = [
+        self::ULTRA_HD,
         self::FULL_HD,
         self::HD,
         self::LD,
     ];
     const RESOLUTION_QUALITY_MAP = [
+        self::ULTRA_HD => 4,
         self::FULL_HD => 3,
         self::HD => 2,
         self::LD => 1,
     ];
 
 	private $value;
+
+	public static function ultraHd(): self
+	{
+		return new static(self::ULTRA_HD);
+	}
 
 	public static function fullHd(): self
 	{
@@ -57,6 +66,11 @@ class Resolution
 		}
 
 		return $this->value;
+	}
+
+	public function isUltraHd(): bool
+	{
+		return self::ULTRA_HD === $this->value;
 	}
 
 	public function isFullHD(): bool
