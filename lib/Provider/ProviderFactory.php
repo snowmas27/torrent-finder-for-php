@@ -21,8 +21,8 @@ class ProviderFactory
 				return new TorrentDownload();
             case ProvidersAvailable::NYAA:
                 return new Nyaa();
-            case ProvidersAvailable::BTDB:
-                return new Btdb();
+            case ProvidersAvailable::TORRENT9:
+                return new Torrent9();
             case ProvidersAvailable::SEEDPEER:
                 return new SeedPeer();
             case ProvidersAvailable::TORRENTGALAXY:

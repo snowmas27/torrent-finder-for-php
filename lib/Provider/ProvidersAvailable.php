@@ -10,7 +10,7 @@ class ProvidersAvailable
     const EXTRATORRENT = 'extratorrent';
 	const TORRENTDOWNLOAD = 'torrentdownload';
     const NYAA = 'nyaa';
-    const BTDB = 'btdb';
+    const TORRENT9 = 'torrent9';
     const SEEDPEER = 'seedpeer';
     const TORRENTGALAXY = 'torrentgalaxy';
     const PROVIDER1333X = '1333x';
@@ -28,7 +28,7 @@ class ProvidersAvailable
             self::EXTRATORRENT,
 			self::TORRENTDOWNLOAD,
             self::NYAA,
-            self::BTDB,
+            self::TORRENT9,
             self::SEEDPEER,
             self::TORRENTGALAXY,
             self::PROVIDER1333X,

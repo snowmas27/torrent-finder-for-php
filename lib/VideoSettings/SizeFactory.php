@@ -4,6 +4,12 @@ namespace TorrentFinder\VideoSettings;
 
 class SizeFactory
 {
+    public static function fromHumanSize(string $humanSize): Size
+    {
+        [$value, $unit] = explode(' ', $humanSize);
+
+        return self::convertFromWeirdFormat($value, $unit);
+    }
     public static function convertFromWeirdFormat(float $value, string $unit): Size
     {
         $unit = strtoupper($unit);
