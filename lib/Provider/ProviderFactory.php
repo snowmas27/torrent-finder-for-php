@@ -31,6 +31,8 @@ class ProviderFactory
                 return new Provider1337x();
             case ProvidersAvailable::ANIMEOSHO:
                 return new Animetosho();
+            case ProvidersAvailable::THE_PIRATE_BAY:
+                return new ThePirateBay();
         }
 		
 		throw new ProviderIsNotFound($name);

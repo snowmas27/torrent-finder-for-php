@@ -15,6 +15,7 @@ class ProvidersAvailable
     const TORRENTGALAXY = 'torrentgalaxy';
     const PROVIDER1333X = '1333x';
     const ANIMEOSHO = 'animetosho';
+    const THE_PIRATE_BAY = 'thepiratebay';
 
 	/**
 	 * @return Provider[]
@@ -33,6 +34,7 @@ class ProvidersAvailable
             self::TORRENTGALAXY,
             self::PROVIDER1333X,
             self::ANIMEOSHO,
+            self::THE_PIRATE_BAY,
 		];
 	}
 }
