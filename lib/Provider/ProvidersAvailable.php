@@ -4,11 +4,11 @@ namespace TorrentFinder\Provider;
 
 class ProvidersAvailable
 {
-	const ZOOQLE = 'zooqle';
-	const LIMETORRENTS = 'limetorrents';
-	const MAGNET4YOU = 'magnet4you';
+    const ZOOQLE = 'zooqle';
+    const LIMETORRENTS = 'limetorrents';
+    const MAGNET4YOU = 'magnet4you';
     const EXTRATORRENT = 'extratorrent';
-	const TORRENTDOWNLOAD = 'torrentdownload';
+    const TORRENTDOWNLOAD = 'torrentdownload';
     const NYAA = 'nyaa';
     const TORRENT9 = 'torrent9';
     const SEEDPEER = 'seedpeer';
@@ -17,17 +17,17 @@ class ProvidersAvailable
     const ANIMEOSHO = 'animetosho';
     const THE_PIRATE_BAY = 'thepiratebay';
 
-	/**
-	 * @return Provider[]
-	 */
-	public static function getList(): array
-	{
-		return [
-			self::LIMETORRENTS,
-			self::ZOOQLE,
-			self::MAGNET4YOU,
+    /**
+     * @return Provider[]
+     */
+    public static function getList(): array
+    {
+        return [
+            self::LIMETORRENTS,
+            self::ZOOQLE,
+            self::MAGNET4YOU,
             self::EXTRATORRENT,
-			self::TORRENTDOWNLOAD,
+            self::TORRENTDOWNLOAD,
             self::NYAA,
             self::TORRENT9,
             self::SEEDPEER,
@@ -35,6 +35,6 @@ class ProvidersAvailable
             self::PROVIDER1333X,
             self::ANIMEOSHO,
             self::THE_PIRATE_BAY,
-		];
-	}
+        ];
+    }
 }

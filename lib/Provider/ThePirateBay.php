@@ -9,25 +9,26 @@ use TorrentFinder\Search\ExtractContentFromUrlProvider;
 use TorrentFinder\Search\SearchQueryBuilder;
 use TorrentFinder\VideoSettings\Size;
 use TorrentFinder\VideoSettings\SizeFactory;
+use TorrentFinder\VideoSettings\Resolution;
 
 class ThePirateBay implements Provider
 {
-	use ExtractContentFromUrlProvider;
-	private $searchUrl;
-	private $name;
-	private $baseUrl;
+    use ExtractContentFromUrlProvider;
+    private $searchUrl;
+    private $name;
+    private $baseUrl;
 
-	public function __construct()
-	{
-		$this->name = ProvidersAvailable::THE_PIRATE_BAY;
-		$this->searchUrl = 'https://thepiratebay3.org/index.php?q=%s&category=0&page=0&orderby=99';
-	}
+    public function __construct()
+    {
+        $this->name = ProvidersAvailable::THE_PIRATE_BAY;
+        $this->searchUrl = 'https://thepiratebay3.org/index.php?q=%s&category=0&page=0&orderby=99';
+    }
 
-	public function search(SearchQueryBuilder $keywords): array
-	{
+    public function search(SearchQueryBuilder $keywords): array
+    {
         $results = [];
-		$url = sprintf($this->searchUrl, $keywords->urlize());
-		$crawler = $this->initDomCrawler($url);
+        $url = sprintf($this->searchUrl, $keywords->urlize());
+        $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('table#searchResult tr') as $item) {
             $itemCrawler = new Crawler($item);
             if (1 >= $itemCrawler->filter('td')->count()) {
@@ -57,13 +58,13 @@ class ThePirateBay implements Provider
                     $title,
                     $magnet,
                     (int) $itemCrawler->filter('td')->eq(2)->text(),
-                    $keywords->getFormat()
+                    Resolution::guessFromString($title)
                 ),
                 SizeFactory::convertFromWeirdFormat($match[1], $match[2])
             );
-		}
+        }
 
-		return $results;
-	}
+        return $results;
+    }
 
 }
