@@ -8,25 +8,26 @@ use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\ExtractContentFromUrlProvider;
 use TorrentFinder\Search\SearchQueryBuilder;
 use TorrentFinder\VideoSettings\Size;
+use TorrentFinder\VideoSettings\Resolution;
 
 class Animetosho implements Provider
 {
-	use ExtractContentFromUrlProvider;
-	private $searchUrl;
-	private $name;
-	private $baseUrl;
+    use ExtractContentFromUrlProvider;
+    private $searchUrl;
+    private $name;
+    private $baseUrl;
 
-	public function __construct()
-	{
-		$this->name = ProvidersAvailable::ANIMEOSHO;
-		$this->searchUrl = 'https://feed.animetosho.org/rss2?q=%s';
-	}
+    public function __construct()
+    {
+        $this->name = ProvidersAvailable::ANIMEOSHO;
+        $this->searchUrl = 'https://feed.animetosho.org/rss2?q=%s';
+    }
 
-	public function search(SearchQueryBuilder $keywords): array
-	{
+    public function search(SearchQueryBuilder $keywords): array
+    {
         $results = [];
-		$url = sprintf($this->searchUrl, $keywords->urlize());
-		$crawler = $this->initDomCrawler($url);
+        $url = sprintf($this->searchUrl, $keywords->urlize());
+        $crawler = $this->initDomCrawler($url);
 
         foreach ($crawler->filter('item') as $item) {
             $itemCrawler = new Crawler($item);
@@ -45,12 +46,11 @@ class Animetosho implements Provider
                 $itemCrawler->filter('title')->text(),
                 $itemCrawler->filter('enclosure')->attr('url'),
                 10,
-                $keywords->getFormat()
+                Resolution::guessFromString($itemCrawler->filter('title')->text())
             );
             $results[] = new ProviderResult($this->name, $metaData, Size::fromHumanSize($match[1]));
-		}
+        }
 
-		return $results;
-	}
-
+        return $results;
+    }
 }
