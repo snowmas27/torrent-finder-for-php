@@ -7,7 +7,7 @@ Torrent finder for PHP is a movie and TvShow search engine based on various torr
 * Torrentdownload
 * Nyaa
 * Torrent9
-* The Pirate Bay
+* ThePirateBay
 
 New providers will be added later.
 
