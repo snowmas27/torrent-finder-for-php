@@ -6,19 +6,19 @@ use TorrentFinder\Exception\ProviderIsNotFound;
 
 class ProviderFactory
 {
-	public static function buildFromName(string $name): Provider
-	{
-		switch ($name) {
-			case ProvidersAvailable::ZOOQLE:
-				return new Zooqle();
-			case ProvidersAvailable::LIMETORRENTS:
-				return new LimeTorrents();
-			case ProvidersAvailable::MAGNET4YOU:
-				return new Magnet4You();
+    public static function buildFromName(string $name): Provider
+    {
+        switch ($name) {
+            case ProvidersAvailable::ZOOQLE:
+                return new Zooqle();
+            case ProvidersAvailable::LIMETORRENTS:
+                return new LimeTorrents();
+            case ProvidersAvailable::MAGNET4YOU:
+                return new Magnet4You();
             case ProvidersAvailable::EXTRATORRENT:
                 return new Extratorrent();
-			case ProvidersAvailable::TORRENTDOWNLOAD:
-				return new TorrentDownload();
+            case ProvidersAvailable::TORRENTDOWNLOAD:
+                return new TorrentDownload();
             case ProvidersAvailable::NYAA:
                 return new Nyaa();
             case ProvidersAvailable::TORRENT9:
@@ -34,7 +34,7 @@ class ProviderFactory
             case ProvidersAvailable::THE_PIRATE_BAY:
                 return new ThePirateBay();
         }
-		
-		throw new ProviderIsNotFound($name);
-	}
+        
+        throw new ProviderIsNotFound($name);
+    }
 }

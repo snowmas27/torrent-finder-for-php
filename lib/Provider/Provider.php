@@ -7,5 +7,5 @@ use TorrentFinder\Search\SearchQueryBuilder;
 
 interface Provider
 {
-	public function search(SearchQueryBuilder $keywords): array;
+    public function search(SearchQueryBuilder $keywords): array;
 }
