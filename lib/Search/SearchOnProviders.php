@@ -9,31 +9,31 @@ use TorrentFinder\Provider\ResultSet\SearchResults;
 
 class SearchOnProviders
 {
-	private $providersName;
+    private $providersName;
 
-	public static function all(): self
-	{
-		return new static(ProvidersAvailable::getList());
-	}
+    public static function all(): self
+    {
+        return new static(ProvidersAvailable::getList());
+    }
 
-	public static function specificProviders(array $providersName): self
-	{
-		return new static($providersName);
-	}
+    public static function specificProviders(array $providersName): self
+    {
+        return new static($providersName);
+    }
 
-	private function __construct(array $providersName)
-	{
-		$this->providersName = $providersName;
-	}
+    private function __construct(array $providersName)
+    {
+        $this->providersName = $providersName;
+    }
 
     /**
      * @param SearchQueryBuilder[] $queryBuilders
      */
-	public function search(array $queryBuilders): SearchResults
-	{
-	    Ensure::allIsInstanceOf($queryBuilders, SearchQueryBuilder::class);
-		$searchResults = [];
-		foreach ($queryBuilders as $queryBuilder) {
+    public function search(array $queryBuilders): SearchResults
+    {
+        Ensure::allIsInstanceOf($queryBuilders, SearchQueryBuilder::class);
+        $searchResults = [];
+        foreach ($queryBuilders as $queryBuilder) {
             foreach ($this->providersName as $name) {
                 try {
                     $searchResults = array_merge($searchResults, $results = ProviderFactory::buildFromName($name)->search($queryBuilder));
@@ -42,8 +42,8 @@ class SearchOnProviders
                 }
             }
         }
-		$searchResults = new SearchResults($searchResults);
+        $searchResults = new SearchResults($searchResults);
 
-		return $searchResults;
-	}
+        return $searchResults;
+    }
 }
