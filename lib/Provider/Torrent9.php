@@ -33,9 +33,7 @@ class Torrent9 implements Provider
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('table.cust-table')->filter('tr') as $item) {
             $itemCrawler = new Crawler($item);
-            $detailPageCrawler = $this->initDomCrawler(
-                $this->baseUrl . $itemCrawler->filter('a')->attr('href')
-            );
+            $detailPageCrawler = $this->initDomCrawler($itemCrawler->filter('a')->attr('href'));
 
             $magnet = null;
             foreach ($detailPageCrawler->filter('div.download-btn') as $itemDetailPage) {
