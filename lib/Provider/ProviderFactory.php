@@ -33,6 +33,8 @@ class ProviderFactory
                 return new Animetosho();
             case ProvidersAvailable::THE_PIRATE_BAY:
                 return new ThePirateBay();
+            case ProvidersAvailable::TORLOCK:
+                return new Torlock();
         }
         
         throw new ProviderIsNotFound($name);

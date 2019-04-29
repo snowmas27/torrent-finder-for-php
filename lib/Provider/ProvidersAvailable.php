@@ -13,6 +13,7 @@ class ProvidersAvailable
     const TORRENT9 = 'torrent9';
     const SEEDPEER = 'seedpeer';
     const TORRENTGALAXY = 'torrentgalaxy';
+    const TORLOCK = 'torlock';
     const PROVIDER1333X = '1333x';
     const ANIMEOSHO = 'animetosho';
     const THE_PIRATE_BAY = 'thepiratebay';
@@ -32,6 +33,7 @@ class ProvidersAvailable
             self::TORRENT9,
             self::SEEDPEER,
             self::TORRENTGALAXY,
+            self::TORLOCK,
             self::PROVIDER1333X,
             self::ANIMEOSHO,
             self::THE_PIRATE_BAY,
