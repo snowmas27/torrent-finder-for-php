@@ -7,8 +7,8 @@ use TorrentFinder\Provider\ResultSet\ProviderResult;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\ExtractContentFromUrlProvider;
 use TorrentFinder\Search\SearchQueryBuilder;
-use TorrentFinder\VideoSettings\Size;
 use TorrentFinder\VideoSettings\Resolution;
+use TorrentFinder\VideoSettings\Size;
 
 class TorrentGalaxy implements Provider
 {
@@ -27,16 +27,19 @@ class TorrentGalaxy implements Provider
         $results = [];
         $url = sprintf($this->searchUrl, $keywords->urlize());
         $crawler = $this->initDomCrawler($url);
-        foreach ($crawler->filter('div.tgxtable')->filter('div.tgxtablerow') as $item) {
+        foreach ($crawler->filterXPath('//*[@id="click"]') as $item) {
             $crawlerResultList = new Crawler($item);
             $cell = $crawlerResultList->filter('div.tgxtablecell');
+            if (0 === $cell->eq(3)->count()) {
+                continue;
+            }
             $metaData = new TorrentData(
-                $title = $cell->eq(2)->filter('a')->text(),
-                $cell->eq(3)->filter('a')->eq(1)->attr('href'),
-                (int) $cell->eq(9)->filter('span > font')->eq(0)->text(),
+                $title = $cell->eq(3)->filter('a')->text(),
+                $cell->eq(4)->filter('a')->eq(1)->attr('href'),
+                (int) $cell->eq(10)->filter('span > font')->eq(0)->text(),
                 Resolution::guessFromString($title)
             );
-            $results[] = new ProviderResult($this->name, $metaData, Size::fromHumanSize($cell->eq(6)->text()));
+            $results[] = new ProviderResult($this->name, $metaData, Size::fromHumanSize($cell->eq(7)->text()));
         }
 
         return $results;
