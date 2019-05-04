@@ -7,12 +7,12 @@
         }
     ],
     "require": {
-	"symfony/symfony": "4.*",
+	    "symfony/symfony": "4.1",
         "matriphe/iso-639": "^1.2",
         "beberlei/assert": "^3.0"
     },
     "require-dev": {
-	"symfony/var-dumper": "4.*"
+	    "symfony/var-dumper": "4.1"
     },
     "autoload": {
         "psr-4": {
