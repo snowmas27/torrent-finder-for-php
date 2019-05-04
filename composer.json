@@ -7,7 +7,7 @@
         }
     ],
     "require": {
-	    "symfony/symfony": "4.1",
+	    "symfony/symfony": "4.*",
         "matriphe/iso-639": "^1.2",
         "beberlei/assert": "^3.0"
     },
