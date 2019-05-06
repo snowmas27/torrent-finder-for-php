@@ -20,13 +20,13 @@ class LimeTorrents implements Provider
     public function __construct()
     {
         $this->name = ProvidersAvailable::LIMETORRENTS;
-        $this->searchUrl = 'https://www.limetorrents.cc/searchrss/%s/';
+        $this->searchUrl = 'https://lime1.unblocked.lol/searchrss/%s/';
     }
 
     public function search(SearchQueryBuilder $keywords): array
     {
         $results = [];
-        $url = sprintf($this->searchUrl, $keywords->urlize());
+        $url = sprintf($this->searchUrl, $keywords->rawUrlEncode());
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('channel > item') as $item) {
             $crawlerResultList = new Crawler($item);
