@@ -8,6 +8,7 @@ class ProvidersAvailable
     const LIMETORRENTS = 'limetorrents';
     const MAGNET4YOU = 'magnet4you';
     const EXTRATORRENT = 'extratorrent';
+    const BTDB = 'btdb';
     const TORRENTDOWNLOAD = 'torrentdownload';
     const NYAA = 'nyaa';
     const TORRENT9 = 'torrent9';
@@ -37,6 +38,7 @@ class ProvidersAvailable
             self::PROVIDER1333X,
             self::ANIMEOSHO,
             self::THE_PIRATE_BAY,
+            self::BTDB,
         ];
     }
 }

@@ -35,6 +35,8 @@ class ProviderFactory
                 return new ThePirateBay();
             case ProvidersAvailable::TORLOCK:
                 return new Torlock();
+            case ProvidersAvailable::BTDB:
+                return new Btdb();
         }
         
         throw new ProviderIsNotFound($name);
