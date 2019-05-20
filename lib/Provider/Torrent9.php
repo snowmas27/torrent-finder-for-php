@@ -21,8 +21,8 @@ class Torrent9 implements Provider
     public function __construct()
     {
         $this->name = ProvidersAvailable::TORRENT9;
-        $this->searchUrl = 'https://wvw.torrent9.uno/search_torrent/%s.html,trie-seeds-d';
-        $this->baseUrl = 'https://wvw.torrent9.uno';
+        $this->baseUrl = 'https://www.torrent9.nz';
+        $this->searchUrl = $this->baseUrl . '/search_torrent/%s.html,trie-seeds-d';
     }
 
     public function search(SearchQueryBuilder $keywords): array
