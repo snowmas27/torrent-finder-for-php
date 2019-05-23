@@ -37,6 +37,8 @@ class ProviderFactory
                 return new Torlock();
             case ProvidersAvailable::BTDB:
                 return new Btdb();
+            case ProvidersAvailable::TORRENTZ2:
+                return new Torrentz2();
         }
         
         throw new ProviderIsNotFound($name);
