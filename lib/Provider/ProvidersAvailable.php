@@ -18,6 +18,7 @@ class ProvidersAvailable
     const PROVIDER1333X = '1333x';
     const ANIMEOSHO = 'animetosho';
     const THE_PIRATE_BAY = 'thepiratebay';
+    const TORRENTZ2 = 'torrentz2';
 
     /**
      * @return Provider[]
@@ -39,6 +40,7 @@ class ProvidersAvailable
             self::ANIMEOSHO,
             self::THE_PIRATE_BAY,
             self::BTDB,
+            self::TORRENTZ2,
         ];
     }
 }
