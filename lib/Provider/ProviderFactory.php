@@ -45,8 +45,6 @@ class ProviderFactory
                 return new Torrent4You();
             case ProvidersAvailable::EZTV:
                 return new Eztv();
-            case ProvidersAvailable::RARBG:
-                return new Rarbg();
         }
         
         throw new ProviderIsNotFound($name);

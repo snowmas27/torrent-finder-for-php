@@ -4,12 +4,11 @@ namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
-use TorrentFinder\Provider\ResultSet\ProviderSearchResult;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\ExtractContentFromUrlProvider;
 use TorrentFinder\Search\SearchQueryBuilder;
-use TorrentFinder\VideoSettings\Size;
 use TorrentFinder\VideoSettings\Resolution;
+use TorrentFinder\VideoSettings\SizeFactory;
 
 class TorrentDownload implements Provider
 {
@@ -31,43 +30,29 @@ class TorrentDownload implements Provider
         foreach ($crawler->filter('channel > item') as $item) {
             $crawlerResultList = new Crawler($item);
             $title = $crawlerResultList->filter('title')->text();
-            // Seeds
-            preg_match(
-                '/Seeds: (\d+)/i',
-                $crawlerResultList->filter('description')->text(),
-                $match
-            );
-            $currentSeeds = $match[1] ?? 0;
-            preg_match(
-                '/Size: ((\d|\.)+ \w{2})/i',
-                $crawlerResultList->filter('description')->text(),
-                $match
-            );
-            $humanSize = $match[1] ?? '';
-            if (strpos($humanSize, ' ') === false) {
+            $description = $crawlerResultList->filter('description')->text();
+            if (null === $humanSize = $this->extractDescription('/Size: ([\d+\.]+ \w{2})/i', $description)) {
                 continue;
             }
-            list($sizeValue, $unitValue) = explode(' ', $humanSize);
 
-            $crawlerDetail = $this->initDomCrawler(
-                $crawlerResultList->filter('guid')->text()
-            );
-
-            $torrent = '';
-            foreach ($crawlerDetail->filterXPath('//table[contains(@class, \'table2\')]') as $table) {
-                $crawlerDetailTable = new Crawler($table);
-                if ($crawlerDetailTable->filterXPath('//tr//a[contains(@href, \'.torrent\')]')->count() === 0) {
-                    continue;
-                }
-                $torrent = $crawlerDetailTable
-                    ->filterXPath('//tr//a[contains(@href, \'.torrent\')]/@href')->html();
+            if (null === $seeds = $this->extractDescription('/Seeds: (\d+)/i', $description)) {
+                continue;
             }
+
+            if (null === $hash = $this->extractDescription('/Hash: (\w+)/i', $description)) {
+                continue;
+            }
+
             try {
-                $size = Size::fromHumanSize(sprintf('%f %s', $sizeValue, $unitValue));
+                $size = SizeFactory::fromHumanSize($humanSize);
                 $metaData = new TorrentData(
                     trim($title),
-                    $torrent,
-                    $currentSeeds,
+                    sprintf(
+                        'magnet:?xt=urn:btih:%s&dn=%s',
+                        $hash,
+                        $title
+                    ),
+                    $seeds,
                     Resolution::guessFromString($title)
                 );
             } catch (\UnexpectedValueException $e) {
@@ -78,4 +63,15 @@ class TorrentDownload implements Provider
         return $results;
     }
 
+    private function extractDescription(string $pattern, string $description): ?string
+    {
+        preg_match($pattern, $description, $match);
+
+        if (empty($match[1])) {
+
+            return null;
+        }
+
+        return $match[1];
+    }
 }

@@ -19,12 +19,15 @@ class SizeFactory
         $gbPossibleFormat = ['G', 'GO', 'GIBYTE', 'GIB', 'GB', 'GBS'];
 
         if (in_array($unit, $kbPossibleFormat, true)) {
+
             return Size::fromHumanSize(sprintf('%f %s', $value, Size::UNIT_KB));
         }
         if (in_array($unit, $mbPossibleFormat, true)) {
+
             return Size::fromHumanSize(sprintf('%f %s', $value, Size::UNIT_MB));
         }
         if (in_array($unit, $gbPossibleFormat, true)) {
+
             return Size::fromHumanSize(sprintf('%f %s', $value, Size::UNIT_GB));
         }
 

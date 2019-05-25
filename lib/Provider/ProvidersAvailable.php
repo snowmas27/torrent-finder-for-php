@@ -22,7 +22,6 @@ class ProvidersAvailable
     const T411 = 't411';
     const TORRENT4YOU = 'torrent4you';
     const EZTV = 'eztv';
-    const RARBG = 'rarbg';
 
     /**
      * @return Provider[]
@@ -48,7 +47,6 @@ class ProvidersAvailable
             self::T411,
             self::TORRENT4YOU,
             self::EZTV,
-            self::RARBG,
         ];
     }
 }
