@@ -11,18 +11,19 @@ use TorrentFinder\VideoSettings\Size;
 use TorrentFinder\VideoSettings\SizeFactory;
 use TorrentFinder\VideoSettings\Resolution;
 
-class Torrent9 implements Provider
+class T411 implements Provider
 {
     use ExtractContentFromUrlProvider;
+
     private $searchUrl;
     private $name;
     private $baseUrl;
 
     public function __construct()
     {
-        $this->name = ProvidersAvailable::TORRENT9;
-        $this->baseUrl = 'https://ww1.torrent9.nz';
-        $this->searchUrl = $this->baseUrl . '/search_torrent/%s.html,trie-seeds-d';
+        $this->name = ProvidersAvailable::T411;
+        $this->baseUrl = 'https://wvw.dfp-montpellier.fr';
+        $this->searchUrl = $this->baseUrl . '/search_torrent/%s.html';
     }
 
     public function search(SearchQueryBuilder $keywords): array
@@ -33,9 +34,7 @@ class Torrent9 implements Provider
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('table.cust-table')->filter('tr') as $item) {
             $itemCrawler = new Crawler($item);
-            $detailPageCrawler = $this->initDomCrawler(
-                $this->baseUrl . $itemCrawler->filter('a')->attr('href')
-            );
+            $detailPageCrawler = $this->initDomCrawler($itemCrawler->filter('a')->attr('href'));
 
             $magnet = null;
             foreach ($detailPageCrawler->filter('div.download-btn') as $itemDetailPage) {
