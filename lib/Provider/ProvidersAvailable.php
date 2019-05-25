@@ -19,6 +19,9 @@ class ProvidersAvailable
     const ANIMEOSHO = 'animetosho';
     const THE_PIRATE_BAY = 'thepiratebay';
     const TORRENTZ2 = 'torrentz2';
+    const T411 = 't411';
+    const TORRENT4YOU = 'torrent4you';
+    const EZTV = 'eztv';
 
     /**
      * @return Provider[]
@@ -41,6 +44,9 @@ class ProvidersAvailable
             self::THE_PIRATE_BAY,
             self::BTDB,
             self::TORRENTZ2,
+            self::T411,
+            self::TORRENT4YOU,
+            self::EZTV,
         ];
     }
 }

@@ -1,14 +1,23 @@
 # torrent-finder-for-php
 Torrent finder for PHP is a movie and TvShow search engine based on various torrent sites.
-* Zooqle
+* 1337X
+* Animetosho
+* Btdb
+* Extratorrent
+* EZTV
 * Lime torrents
 * Magnet4You
-* Extratorrent
-* Torrentdownload
 * Nyaa
-* Torrent9
+* SeedPeer
+* T411
 * The Pirate Bay
-* Btdb
+* Torlock
+* Torrent4You
+* Torrent9
+* Torrentdownload
+* Torrent galaxy
+* Torrentz2
+* Zooqle
 
 New providers will be added later.
 
@@ -27,6 +36,12 @@ The following code is an example of how to use the library
 ### Movie
 
 ```
+use TorrentFinder\Search\SearchQuery;
+use TorrentFinder\Search\SearchQueryBuilder;
+use TorrentFinder\Search\SearchOnProviders;
+use TorrentFinder\VideoSettings\Resolution;
+use TorrentFinder\Provider\ProvidersAvailable;
+
 $query = SearchQuery::movie('Wonder Woman', 2017);
 
 $searchKeywords = new SearchQueryBuilder($query, Resolution::fullHd());
@@ -51,6 +66,12 @@ $results->getResults();
 
 ### TvShow episode
 ```
+use TorrentFinder\Search\SearchQuery;
+use TorrentFinder\Search\SearchQueryBuilder;
+use TorrentFinder\Search\SearchOnProviders;
+use TorrentFinder\VideoSettings\Resolution;
+use TorrentFinder\Provider\ProvidersAvailable;
+
 // (title, season, episode)
 $query = SearchQuery::tvShowEpisode('Game Of Thrones', 2, 6);
 

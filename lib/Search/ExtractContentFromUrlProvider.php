@@ -8,16 +8,10 @@ trait ExtractContentFromUrlProvider
 {
     public function initDomCrawler(string $url): Crawler
     {
-        $content = $this->fileGetContentsCurl($url);
-
-        if (false === $content) {
-            throw new \UnexpectedValueException("$url is unreachable");
-        }
-
-        return new Crawler($content);
+        return new Crawler($this->fileGetContentsCurl($url));
     }
 
-    private function fileGetContentsCurl(string $url)
+    private function fileGetContentsCurl(string $url): string
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -29,6 +23,14 @@ trait ExtractContentFromUrlProvider
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $data = curl_exec($ch);
         curl_close($ch);
+
+        if (false === $data) {
+            throw new \UnexpectedValueException("$url is unreachable");
+        }
+
+        if (false !== strpos($data, 'Please turn JavaScript on and reload the page.')) {
+            throw new \UnexpectedValueException("$url is Cloudflare protected");
+        }
 
         return $data;
     }

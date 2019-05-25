@@ -39,6 +39,12 @@ class ProviderFactory
                 return new Btdb();
             case ProvidersAvailable::TORRENTZ2:
                 return new Torrentz2();
+            case ProvidersAvailable::T411:
+                return new T411();
+            case ProvidersAvailable::TORRENT4YOU:
+                return new Torrent4You();
+            case ProvidersAvailable::EZTV:
+                return new Eztv();
         }
         
         throw new ProviderIsNotFound($name);
