@@ -25,13 +25,18 @@ class SearchResults
     /**
      * @return ProviderResult[]
      */
-    public function getResultsWithSeedsGreaterThan(int $seeds): array
+    public function getResultsWithSeedsGreaterThan(int $seeds, array $resolutions = null): array
     {
         $results = [];
         foreach ($this->results as $result) {
+			if (null !== $resolutions && !in_array($result->getTorrentMetaData()->getFormat()->getValue(), $resolutions)) {
+				continue;								
+			}
+
             if ($result->getTorrentMetaData()->getSeeds() < $seeds) {
                 continue;
             }
+
             $results[] = $result;
         }
 
