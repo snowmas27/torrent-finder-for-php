@@ -2,7 +2,6 @@
 
 namespace TorrentFinder\Search;
 
-use Matriphe\ISO639\ISO639;
 use TorrentFinder\VideoSettings\Resolution;
 
 class SearchQueryBuilder
@@ -10,7 +9,7 @@ class SearchQueryBuilder
     private $query;
     private $resolution;
     private $searchKeywords;
-    private $version;
+    private $customKeywords;
 
     public function __construct(SearchQuery $query, Resolution $resolution)
     {
@@ -31,13 +30,18 @@ class SearchQueryBuilder
 
     public function getSearchKeywords(): string
     {
-        return (null !== $this->version) ? sprintf('%s %s', $this->searchKeywords, $this->version) : $this->searchKeywords;
+        $query = $this->searchKeywords;
+
+        if (null !== $this->customKeywords) {
+            $query = sprintf('%s %s', $query, $this->customKeywords);
+        }
+
+        return $query;
     }
 
-    public function withAudioLanguageVersion(string $languageIsoCode)
+    public function addKeywords(string $keywords): void
     {
-        $iso = new ISO639();
-        $this->version = $iso->languageByCode1($languageIsoCode);
+        $this->customKeywords = $keywords;
     }
 
     public function urlize(string $char = '+'): string
