@@ -21,7 +21,7 @@ class Torrent9 implements Provider
     public function __construct()
     {
         $this->name = ProvidersAvailable::TORRENT9;
-        $this->baseUrl = 'https://ww1.torrent9.nz';
+        $this->baseUrl = 'https://ww1.torrent9.to';
         $this->searchUrl = $this->baseUrl . '/search_torrent/%s.html,trie-seeds-d';
     }
 
@@ -51,6 +51,7 @@ class Torrent9 implements Provider
                 continue;
             }
 
+            $sizeValue = (float) $itemCrawler->filter('td')->eq(1)->text();
             $results[] = new ProviderResult(
                 $this->name,
                 $metaData = new TorrentData(
@@ -62,7 +63,13 @@ class Torrent9 implements Provider
                     ,
                     Resolution::guessFromString($title)
                 ),
-                SizeFactory::fromHumanSize($itemCrawler->filter('td')->eq(1)->text())
+                SizeFactory::fromHumanSize(
+                    sprintf(
+                        '%s %s',
+                        $sizeValue,
+                        $sizeValue > 1000 ? Size::UNIT_GB : Size::UNIT_MB
+                    )
+                )
             );
         }
 

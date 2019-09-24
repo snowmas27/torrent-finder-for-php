@@ -20,7 +20,7 @@ class LimeTorrents implements Provider
     public function __construct()
     {
         $this->name = ProvidersAvailable::LIMETORRENTS;
-        $this->searchUrl = 'https://www.limetor.pro/searchrss/%s/';
+        $this->searchUrl = 'https://limetorrents.info/searchrss/%s/';
     }
 
     public function search(SearchQueryBuilder $keywords): array
