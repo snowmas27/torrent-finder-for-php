@@ -19,7 +19,7 @@ class Extratorrent implements Provider
     public function __construct()
     {
         $this->name = ProvidersAvailable::EXTRATORRENT;
-        $this->searchUrl = 'https://extratorrents-cc.com/search/?mot_top=%s&new=1&x=0&y=0';
+        $this->searchUrl = 'https://xtra.unblocked.lol/search/?search=%s&new=1&x=0&y=0';
     }
 
     public function search(SearchQueryBuilder $keywords): array

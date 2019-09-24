@@ -21,7 +21,7 @@ class ThePirateBay implements Provider
     public function __construct()
     {
         $this->name = ProvidersAvailable::THE_PIRATE_BAY;
-        $this->searchUrl = 'https://thepiratebay.org/search/%s/0/7/0';
+        $this->searchUrl = 'https://openpirate.org/search/%s/0/7/0';
     }
 
     public function search(SearchQueryBuilder $keywords): array
