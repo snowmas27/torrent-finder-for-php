@@ -7,7 +7,6 @@ use TorrentFinder\Provider\ResultSet\ProviderResult;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\ExtractContentFromUrlProvider;
 use TorrentFinder\Search\SearchQueryBuilder;
-use TorrentFinder\VideoSettings\Size;
 use TorrentFinder\VideoSettings\SizeFactory;
 use TorrentFinder\VideoSettings\Resolution;
 
