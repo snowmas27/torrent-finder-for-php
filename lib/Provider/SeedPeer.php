@@ -32,25 +32,31 @@ class SeedPeer implements Provider
       if (false === preg_match('/window\.initialData=(.*)/i', $crawler->text(), $match)) {
 
           return [];
-        }
+      }
+
+      if (empty($match)) {
+
+          return [];
+      }
+
       $rawResults = json_decode(trim($match[1]), true);
 
       if (empty($rawResults['data']['list'])) {
 
           return [];
-        }
+      }
 
-        foreach ($rawResults['data']['list'] as $datum) {
-            $results[] = new ProviderResult(
-                $this->name,
-                $metaData = new TorrentData(
-                    $title = $datum['name'],
-                    sprintf('magnet:?xt=urn:btih:%s&dn=%s', $datum['hash'], urlencode($datum['name'])),
-                    $datum['seeds'],
-                    Resolution::guessFromString($title)
-                ),
-                new Size($datum['size'])
-            );
+      foreach ($rawResults['data']['list'] as $datum) {
+          $results[] = new ProviderResult(
+            $this->name,
+            $metaData = new TorrentData(
+                $title = $datum['name'],
+                sprintf('magnet:?xt=urn:btih:%s&dn=%s', $datum['hash'], urlencode($datum['name'])),
+                $datum['seeds'],
+                Resolution::guessFromString($title)
+            ),
+            new Size($datum['size'])
+        );
       }
 
       return $results;

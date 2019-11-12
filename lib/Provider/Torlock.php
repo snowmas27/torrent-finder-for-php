@@ -21,8 +21,8 @@ class Torlock implements Provider
     public function __construct()
     {
         $this->name = ProvidersAvailable::TORLOCK;
-        $this->searchUrl = 'https://www.torlock2.com/all/torrents/%s.html?sort=seeds';
-        $this->baseUrl = 'https://www.torlock2.com';
+        $this->baseUrl = 'https://www.torlock.com';
+        $this->searchUrl = $this->baseUrl . '/all/torrents/%s.html?sort=seeds';
     }
 
     public function search(SearchQueryBuilder $keywords): array

@@ -30,7 +30,6 @@ class Provider1337x implements Provider
         $results = [];
         $url = sprintf($this->searchUrl, $keywords->urlize());
         $crawler = $this->initDomCrawler($url);
-
         foreach ($crawler->filter('div.table-list-wrap')->filter('tbody > tr') as $item) {
             $crawlerResultList = new Crawler($item);
             $td = $crawlerResultList->filter('td');
@@ -66,9 +65,8 @@ class Provider1337x implements Provider
 
     private function extractMagnet(Crawler $detailPage): ?string
     {
-        foreach ($detailPage->filter('div.torrent-category-detail > ul > li > a') as $item) {
+        foreach ($detailPage->filter('div.torrent-detail-page')->filter('a') as $item) {
             $crawler = new Crawler($item);
-
             if (false === strpos($href = $crawler->attr('href'), 'magnet:')) {
                 continue;
             }
