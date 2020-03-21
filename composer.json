@@ -1,6 +1,11 @@
 {
-    "type": "project",
-    "license": "proprietary",
+    "name": "snowmas27/torrent-finder-for-php",
+    "authors": [
+        {
+            "name": "Thomas",
+            "email": "tringuede.dev@gmail.com"
+        }
+    ],
     "require": {
         "php": "^7.2.5",
         "ext-ctype": "*",
