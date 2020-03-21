@@ -36,11 +36,11 @@ The following code is an example of how to use the library
 ### Movie
 
 ```
-use TorrentFinder\Search\SearchQuery;
-use TorrentFinder\Search\SearchQueryBuilder;
-use TorrentFinder\Search\SearchOnProviders;
-use TorrentFinder\VideoSettings\Resolution;
-use TorrentFinder\Provider\ProvidersAvailable;
+use App\Search\SearchQuery;
+use App\Search\SearchQueryBuilder;
+use App\Search\SearchOnProviders;
+use App\VideoSettings\Resolution;
+use App\Provider\ProvidersAvailable;
 
 $query = SearchQuery::movie('Wonder Woman', 2017);
 
@@ -66,11 +66,11 @@ $results->getResults();
 
 ### TvShow episode
 ```
-use TorrentFinder\Search\SearchQuery;
-use TorrentFinder\Search\SearchQueryBuilder;
-use TorrentFinder\Search\SearchOnProviders;
-use TorrentFinder\VideoSettings\Resolution;
-use TorrentFinder\Provider\ProvidersAvailable;
+use App\Search\SearchQuery;
+use App\Search\SearchQueryBuilder;
+use App\Search\SearchOnProviders;
+use App\VideoSettings\Resolution;
+use App\Provider\ProvidersAvailable;
 
 // (title, season, episode)
 $query = SearchQuery::tvShowEpisode('Game Of Thrones', 2, 6);

@@ -1,0 +1,89 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    providers:
+        1333X:
+            name: '1333X'
+            searchUrl: 'https://1337x.to/sort-search/%s/seeders/desc/1/'
+            class: App\Provider\Provider1337x
+        animetosho:
+            name: 'animetosho'
+            searchUrl: 'https://feed.animetosho.org/rss2?q=%s'
+            class: App\Provider\Animetosho
+        btdb:
+            name: 'btdb'
+            searchUrl: 'https://btdb.io/search/%s/?sort=popular'
+            class: App\Provider\Btdb
+        extratorrent:
+            name: 'extratorrent'
+            searchUrl: 'https://xtra.unblocked.lol/search/?search=%s&new=1&x=0&y=0'
+            class: App\Provider\Extratorrent
+        magnet4you:
+            name: 'magnet4you'
+            searchUrl: 'https://magnet4you.me/search.php?s=%s&sort=seed'
+            class: App\Provider\Magnet4You
+        nyaa:
+            name: 'nyaa'
+            searchUrl: 'https://nyaa.si/?f=0&c=1_0&q=%s&s=seeders&o=desc'
+            class: App\Provider\Nyaa
+        limetorrents:
+            name: 'limetorrents'
+            searchUrl: 'https://limetorrents.info/searchrss/%s/'
+            class: App\Provider\LimeTorrents
+        thepiratebay:
+            name: 'thepiratebay'
+            searchUrl: 'https://openpirate.org/search/%s/0/7/0'
+            class: App\Provider\ThePirateBay
+        torlock:
+            name: 'torlock'
+            searchUrl: 'https://www.torlock.com/all/torrents/%s.html?sort=seeds'
+            class: App\Provider\Torlock
+        torrent4you:
+            name: 'torrent4you'
+            searchUrl: 'http://torrent4you.me/search.php?s=%s&sort=seed'
+            class: App\Provider\Torrent4You
+        torrent9:
+            name: 'torrent9'
+            searchUrl: 'https://ww1.torrent9.is/search_torrent/%s.html,trie-seeds-d'
+            class: App\Provider\Torrent9
+        torrentgalaxy:
+            name: 'torrentgalaxy'
+            searchUrl: 'https://torrentgalaxy.to/torrents.php?search=%s&sort=seeders&order=desc'
+            class: App\Provider\TorrentGalaxy
+#        torrentz2:
+#            name: 'torrentz2'
+#            searchUrl: 'https://torrentz2.io/feed?f=%s'
+#            class: App\Provider\Torrentz2
+        zooqle:
+            name: 'zooqle'
+            searchUrl: 'https://zooqle.com/search?q=%s&fmt=rss'
+            class: App\Provider\Zooqle
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    App\Provider\ProvidersConfiguration:
+        arguments:
+            $providers: '%providers%'
+
+    App\Search\SearchOnProviders:
+        arguments:
+            $providersConfigurations: '@App\Provider\ProvidersConfiguration'
