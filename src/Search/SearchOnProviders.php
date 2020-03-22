@@ -45,7 +45,6 @@ class SearchOnProviders
                         $searchResults,
                         $results = $this->searchOnProvider($queryBuilder, $providerConfiguration)
                     );
-                    dump($providerConfiguration->getInformation()->getName());
                 } catch (\Exception $e) {
                     printf("%s\n", $e->getMessage());
                 }
