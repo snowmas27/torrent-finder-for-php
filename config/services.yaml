@@ -53,10 +53,10 @@ parameters:
             name: 'torrentgalaxy'
             searchUrl: 'https://torrentgalaxy.to/torrents.php?search=%s&sort=seeders&order=desc'
             class: App\Provider\TorrentGalaxy
-#        torrentz2:
-#            name: 'torrentz2'
-#            searchUrl: 'https://torrentz2.io/feed?f=%s'
-#            class: App\Provider\Torrentz2
+        #        torrentz2:
+        #            name: 'torrentz2'
+        #            searchUrl: 'https://torrentz2.io/feed?f=%s'
+        #            class: App\Provider\Torrentz2
         zooqle:
             name: 'zooqle'
             searchUrl: 'https://zooqle.com/search?q=%s&fmt=rss'
