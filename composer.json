@@ -7,7 +7,7 @@
         }
     ],
     "require": {
-        "php": "^7.2.5",
+        "php": "~7.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "beberlei/assert": "^3.0",
@@ -55,9 +55,6 @@
         "post-update-cmd": [
             "@auto-scripts"
         ]
-    },
-    "conflict": {
-        "symfony/symfony": "*"
     },
     "extra": {
         "symfony": {
