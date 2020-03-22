@@ -5,7 +5,6 @@ namespace App\Search;
 use App\Exception\Ensure;
 use App\Provider\ProviderConfiguration;
 use App\Provider\ProviderFactory;
-use App\Provider\ProviderInformation;
 use App\Provider\ProvidersConfiguration;
 use App\Provider\ResultSet\SearchResults;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -60,7 +59,7 @@ class SearchOnProviders
     private function searchOnProvider(SearchQueryBuilder $queryBuilder, ProviderConfiguration $providerConfiguration): array
     {
         return $this->cache->get(
-            sprintf('%s-%s', $queryBuilder->urlize(), $providerConfiguration->getInformation()->getName()),
+            sprintf('%s-%s', $queryBuilder->urlize('-'), $providerConfiguration->getInformation()->getName()),
             function (ItemInterface $item) use ($queryBuilder, $providerConfiguration) {
                 // Expire every 12h
                 $item->expiresAfter(12 * 60 * 60);
