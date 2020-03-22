@@ -1,0 +1,8 @@
+{
+    "php": {
+        "version": "7.4"
+    },
+    "symfony/debug": {
+        "version": "v4.4.5"
+    }
+}
