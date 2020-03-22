@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Utils;
+namespace TorrentFinder\Tests\Utils;
 
-use App\Utils\Url;
+use TorrentFinder\Utils\Url;
 use PHPUnit\Framework\TestCase;
 
 class UrlTest extends TestCase

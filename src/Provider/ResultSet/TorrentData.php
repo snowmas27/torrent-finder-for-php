@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Provider\ResultSet;
+namespace TorrentFinder\Provider\ResultSet;
 
-use App\Exception\Ensure;
-use App\VideoSettings\Resolution;
+use TorrentFinder\Exception\Ensure;
+use TorrentFinder\VideoSettings\Resolution;
 
 class TorrentData
 {

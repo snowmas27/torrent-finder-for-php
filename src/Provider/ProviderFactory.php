@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Provider;
+namespace TorrentFinder\Provider;
 
 class ProviderFactory
 {

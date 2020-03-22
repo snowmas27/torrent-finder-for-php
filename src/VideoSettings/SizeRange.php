@@ -1,6 +1,6 @@
 <?php
 
-namespace App\VideoSettings;
+namespace TorrentFinder\VideoSettings;
 
 class SizeRange
 {

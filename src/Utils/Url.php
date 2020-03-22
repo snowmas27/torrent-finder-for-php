@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils;
+namespace TorrentFinder\Utils;
 
 class Url
 {

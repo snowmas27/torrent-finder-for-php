@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Provider;
+namespace TorrentFinder\Provider;
 
-use App\Search\SearchQueryBuilder;
+use TorrentFinder\Search\SearchQueryBuilder;
 
 interface Provider
 {

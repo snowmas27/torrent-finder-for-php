@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Provider;
+namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
-use App\Provider\ResultSet\ProviderResult;
-use App\Provider\ResultSet\TorrentData;
-use App\Search\ExtractContentFromUrlProvider;
-use App\Search\SearchQueryBuilder;
-use App\VideoSettings\Size;
-use App\VideoSettings\Resolution;
+use TorrentFinder\Provider\ResultSet\ProviderResult;
+use TorrentFinder\Provider\ResultSet\TorrentData;
+use TorrentFinder\Search\ExtractContentFromUrlProvider;
+use TorrentFinder\Search\SearchQueryBuilder;
+use TorrentFinder\VideoSettings\Size;
+use TorrentFinder\VideoSettings\Resolution;
 
 class Provider1337x implements Provider
 {

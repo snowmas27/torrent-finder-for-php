@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Provider\ResultSet;
+namespace TorrentFinder\Provider\ResultSet;
 
 class SearchResultSummary
 {

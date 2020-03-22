@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Provider;
+namespace TorrentFinder\Provider;
 
-use App\Utils\Url;
+use TorrentFinder\Utils\Url;
 
 class ProvidersConfiguration
 {

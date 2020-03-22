@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Exception;
+namespace TorrentFinder\Exception;
 
 use Assert\Assertion;
-use App\VideoSettings\Size;
+use TorrentFinder\VideoSettings\Size;
 
 class Ensure extends Assertion
 {

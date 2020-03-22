@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace TorrentFinder;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

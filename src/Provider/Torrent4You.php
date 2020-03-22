@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Provider;
+namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
-use App\Provider\ResultSet\ProviderResult;
-use App\Provider\ResultSet\TorrentData;
-use App\Search\ExtractContentFromUrlProvider;
-use App\Search\SearchQueryBuilder;
-use App\VideoSettings\Resolution;
-use App\VideoSettings\SizeFactory;
+use TorrentFinder\Provider\ResultSet\ProviderResult;
+use TorrentFinder\Provider\ResultSet\TorrentData;
+use TorrentFinder\Search\ExtractContentFromUrlProvider;
+use TorrentFinder\Search\SearchQueryBuilder;
+use TorrentFinder\VideoSettings\Resolution;
+use TorrentFinder\VideoSettings\SizeFactory;
 
 class Torrent4You implements Provider
 {

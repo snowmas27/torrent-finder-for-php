@@ -1,8 +1,8 @@
 <?php
 
-namespace App\VideoSettings;
+namespace TorrentFinder\VideoSettings;
 
-use App\Exception\Ensure;
+use TorrentFinder\Exception\Ensure;
 
 class Resolution
 {

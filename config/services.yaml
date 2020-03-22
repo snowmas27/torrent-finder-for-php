@@ -8,59 +8,59 @@ parameters:
         1333X:
             name: '1333X'
             searchUrl: 'https://1337x.to/sort-search/%s/seeders/desc/1/'
-            class: App\Provider\Provider1337x
+            class: TorrentFinder\Provider\Provider1337x
         animetosho:
             name: 'animetosho'
             searchUrl: 'https://feed.animetosho.org/rss2?q=%s'
-            class: App\Provider\Animetosho
+            class: TorrentFinder\Provider\Animetosho
         btdb:
             name: 'btdb'
             searchUrl: 'https://btdb.io/search/%s/?sort=popular'
-            class: App\Provider\Btdb
+            class: TorrentFinder\Provider\Btdb
         extratorrent:
             name: 'extratorrent'
             searchUrl: 'https://xtra.unblocked.lol/search/?search=%s&new=1&x=0&y=0'
-            class: App\Provider\Extratorrent
+            class: TorrentFinder\Provider\Extratorrent
         magnet4you:
             name: 'magnet4you'
             searchUrl: 'https://magnet4you.me/search.php?s=%s&sort=seed'
-            class: App\Provider\Magnet4You
+            class: TorrentFinder\Provider\Magnet4You
         nyaa:
             name: 'nyaa'
             searchUrl: 'https://nyaa.si/?f=0&c=1_0&q=%s&s=seeders&o=desc'
-            class: App\Provider\Nyaa
+            class: TorrentFinder\Provider\Nyaa
         limetorrents:
             name: 'limetorrents'
             searchUrl: 'https://limetorrents.info/searchrss/%s/'
-            class: App\Provider\LimeTorrents
+            class: TorrentFinder\Provider\LimeTorrents
         thepiratebay:
             name: 'thepiratebay'
             searchUrl: 'https://openpirate.org/search/%s/0/7/0'
-            class: App\Provider\ThePirateBay
+            class: TorrentFinder\Provider\ThePirateBay
         torlock:
             name: 'torlock'
             searchUrl: 'https://www.torlock.com/all/torrents/%s.html?sort=seeds'
-            class: App\Provider\Torlock
+            class: TorrentFinder\Provider\Torlock
         torrent4you:
             name: 'torrent4you'
             searchUrl: 'http://torrent4you.me/search.php?s=%s&sort=seed'
-            class: App\Provider\Torrent4You
+            class: TorrentFinder\Provider\Torrent4You
         torrent9:
             name: 'torrent9'
             searchUrl: 'https://ww1.torrent9.is/search_torrent/%s.html,trie-seeds-d'
-            class: App\Provider\Torrent9
+            class: TorrentFinder\Provider\Torrent9
         torrentgalaxy:
             name: 'torrentgalaxy'
             searchUrl: 'https://torrentgalaxy.to/torrents.php?search=%s&sort=seeders&order=desc'
-            class: App\Provider\TorrentGalaxy
+            class: TorrentFinder\Provider\TorrentGalaxy
         #        torrentz2:
         #            name: 'torrentz2'
         #            searchUrl: 'https://torrentz2.io/feed?f=%s'
-        #            class: App\Provider\Torrentz2
+        #            class: TorrentFinder\Provider\Torrentz2
         zooqle:
             name: 'zooqle'
             searchUrl: 'https://zooqle.com/search?q=%s&fmt=rss'
-            class: App\Provider\Zooqle
+            class: TorrentFinder\Provider\Zooqle
 
 services:
     # default configuration for services in *this* file
@@ -70,14 +70,14 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    App\:
+    TorrentFinder\:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
-    App\Provider\ProvidersConfiguration:
+    TorrentFinder\Provider\ProvidersConfiguration:
         arguments:
             $providers: '%providers%'
 
-    App\Search\SearchOnProviders:
+    TorrentFinder\Search\SearchOnProviders:
         arguments:
-            $providersConfigurations: '@App\Provider\ProvidersConfiguration'
+            $providersConfigurations: '@TorrentFinder\Provider\ProvidersConfiguration'

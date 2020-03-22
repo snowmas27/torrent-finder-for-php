@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Command;
+namespace TorrentFinder\Command;
 
-use App\Search\SearchOnProviders;
-use App\Search\SearchQuery;
-use App\Search\SearchQueryBuilder;
-use App\VideoSettings\Resolution;
+use TorrentFinder\Search\SearchOnProviders;
+use TorrentFinder\Search\SearchQuery;
+use TorrentFinder\Search\SearchQueryBuilder;
+use TorrentFinder\VideoSettings\Resolution;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

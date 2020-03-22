@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Provider\ResultSet;
+namespace TorrentFinder\Provider\ResultSet;
 
-use App\VideoSettings\Size;
+use TorrentFinder\VideoSettings\Size;
 
 class ProviderResult
 {

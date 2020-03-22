@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Search;
+namespace TorrentFinder\Search;
 
-use App\VideoSettings\Resolution;
+use TorrentFinder\VideoSettings\Resolution;
 
 class SearchQueryBuilder
 {

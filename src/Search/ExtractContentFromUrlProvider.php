@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Search;
+namespace TorrentFinder\Search;
 
 use Symfony\Component\DomCrawler\Crawler;
 

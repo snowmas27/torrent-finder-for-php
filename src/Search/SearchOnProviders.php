@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Search;
+namespace TorrentFinder\Search;
 
-use App\Exception\Ensure;
-use App\Provider\ProviderConfiguration;
-use App\Provider\ProviderFactory;
-use App\Provider\ProvidersConfiguration;
-use App\Provider\ResultSet\SearchResults;
+use TorrentFinder\Exception\Ensure;
+use TorrentFinder\Provider\ProviderConfiguration;
+use TorrentFinder\Provider\ProviderFactory;
+use TorrentFinder\Provider\ProvidersConfiguration;
+use TorrentFinder\Provider\ResultSet\SearchResults;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
