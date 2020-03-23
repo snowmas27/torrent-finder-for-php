@@ -2,6 +2,7 @@
 
 namespace TorrentFinder\Search;
 
+use Assert\Assertion;
 use TorrentFinder\Exception\Ensure;
 use TorrentFinder\Provider\ProviderConfiguration;
 use TorrentFinder\Provider\ProviderFactory;
@@ -28,22 +29,29 @@ class SearchOnProviders
 
     /**
      * @param SearchQueryBuilder[] $queryBuilders
+     * @param array $options
      */
-    public function search(array $queryBuilders, array $onlyOnProviders = []): SearchResults
+    public function search(array $queryBuilders, array $options = []): SearchResults
     {
         Ensure::allIsInstanceOf($queryBuilders, SearchQueryBuilder::class);
 
+        $forceRefresh = !empty($options['forceRefresh']) ? $options['forceRefresh'] : false;
+        Assertion::boolean($forceRefresh);
         $searchResults = [];
         foreach ($queryBuilders as $queryBuilder) {
             foreach ($this->providersConfigurations->getConfiguration() as $providerConfiguration) {
-                if (!empty($onlyOnProviders) && !in_array($providerConfiguration->getInformation()->getName(), $onlyOnProviders, true)) {
+                if (!empty($options['providers']) && !in_array($providerConfiguration->getInformation()->getName(), $options['providers'], true)) {
                     continue;
                 }
 
                 try {
                     $searchResults = array_merge(
                         $searchResults,
-                        $results = $this->searchOnProvider($queryBuilder, $providerConfiguration)
+                        $results = $this->searchOnProvider(
+                            $queryBuilder,
+                            $providerConfiguration,
+                            $forceRefresh
+                        )
                     );
                 } catch (\Exception $e) {
                     printf("%s\n", $e->getMessage());
@@ -55,8 +63,16 @@ class SearchOnProviders
         return $searchResults;
     }
 
-    private function searchOnProvider(SearchQueryBuilder $queryBuilder, ProviderConfiguration $providerConfiguration): array
+    private function searchOnProvider(
+        SearchQueryBuilder $queryBuilder,
+        ProviderConfiguration $providerConfiguration,
+        bool $forceRefresh
+    ): array
     {
+        if ($forceRefresh) {
+            return $this->providerFactory->buildFromProviderConfiguration($providerConfiguration)->search($queryBuilder);
+        }
+
         return $this->cache->get(
             sprintf('%s-%s', $queryBuilder->urlize('-'), $providerConfiguration->getInformation()->getName()),
             function (ItemInterface $item) use ($queryBuilder, $providerConfiguration) {
