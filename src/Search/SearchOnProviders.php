@@ -70,6 +70,7 @@ class SearchOnProviders
     ): array
     {
         if ($forceRefresh) {
+
             return $this->providerFactory->buildFromProviderConfiguration($providerConfiguration)->search($queryBuilder);
         }
 

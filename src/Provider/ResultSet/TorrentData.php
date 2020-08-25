@@ -62,7 +62,7 @@ class TorrentData
             'title' => $this->title,
             'magnetURI' => $this->magnetURI,
             'seeds' => $this->seeds,
-            'format' => $this->format,
+            'format' => $this->format->getValue(),
         ];
     }
 }

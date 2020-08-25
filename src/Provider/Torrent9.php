@@ -5,7 +5,7 @@ namespace TorrentFinder\Provider;
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
 use TorrentFinder\Provider\ResultSet\TorrentData;
-use TorrentFinder\Search\ExtractContentFromUrlProvider;
+use TorrentFinder\Search\CrawlerInformationExtractor;
 use TorrentFinder\Search\SearchQueryBuilder;
 use TorrentFinder\VideoSettings\Size;
 use TorrentFinder\VideoSettings\SizeFactory;
@@ -13,7 +13,7 @@ use TorrentFinder\VideoSettings\Resolution;
 
 class Torrent9 implements Provider
 {
-    use ExtractContentFromUrlProvider;
+    use CrawlerInformationExtractor;
 
     private $providerInformation;
 

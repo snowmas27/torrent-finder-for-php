@@ -53,6 +53,10 @@ parameters:
             name: 'torrentgalaxy'
             searchUrl: 'https://torrentgalaxy.to/torrents.php?search=%s&sort=seeders&order=desc'
             class: TorrentFinder\Provider\TorrentGalaxy
+        yify:
+            name: 'yify'
+            searchUrl: 'https://yts.mx/browse-movies/%s/all/all/0/latest/0/all'
+            class: TorrentFinder\Provider\Yify
         #        torrentz2:
         #            name: 'torrentz2'
         #            searchUrl: 'https://torrentz2.io/feed?f=%s'
