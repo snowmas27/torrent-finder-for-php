@@ -14,6 +14,7 @@ Torrent finder for PHP is a movie and TvShow search engine based on various torr
 * Torrentdownload
 * Torrent galaxy
 * Torrentz2
+* Yify
 * Zooqle
 
 New providers will be added later.

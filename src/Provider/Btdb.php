@@ -4,15 +4,16 @@ namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
+use TorrentFinder\Provider\ResultSet\ProviderResults;
 use TorrentFinder\Provider\ResultSet\TorrentData;
-use TorrentFinder\Search\ExtractContentFromUrlProvider;
+use TorrentFinder\Search\CrawlerInformationExtractor;
 use TorrentFinder\Search\SearchQueryBuilder;
 use TorrentFinder\VideoSettings\Size;
 use TorrentFinder\VideoSettings\Resolution;
 
 class Btdb implements Provider
 {
-    use ExtractContentFromUrlProvider;
+    use CrawlerInformationExtractor;
 
     private $providerInformation;
 
@@ -23,7 +24,7 @@ class Btdb implements Provider
 
     public function search(SearchQueryBuilder $keywords): array
     {
-        $results = [];
+        $results = new ProviderResults();
         $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->urlize());
         /** @var Crawler $crawler */
         $crawler = $this->initDomCrawler($url);
@@ -33,15 +34,17 @@ class Btdb implements Provider
                 continue;
             }
 
-            $magnet = $domCrawler->filter('div.media-right > a')->attr('href');
+            $magnet = $this->findAttribute($domCrawler->filter('div.media-right > a'), 'href');
             $itemMetaCrawler = $domCrawler->filter('div.item-meta-info small');
-            $size = Size::fromHumanSize($itemMetaCrawler->eq(0)->filter('strong')->text());
-            $seeds = $itemMetaCrawler->eq(2)->filter('strong')->text();
+            $size = Size::fromHumanSize(
+                $this->findText($itemMetaCrawler->eq(0)->filter('strong'))
+            );
+            $seeds = $this->findText($itemMetaCrawler->eq(2)->filter('strong'));
             $metaData = new TorrentData($title, $magnet, $seeds, Resolution::guessFromString($title));
-            $results[] = new ProviderResult($this->providerInformation->getName(), $metaData, $size);
+            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
         }
 
-        return $results;
+        return $results->getResults();
     }
 
     public function findVideo(Crawler $domCrawler): ?string

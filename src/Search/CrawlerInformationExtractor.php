@@ -4,11 +4,31 @@ namespace TorrentFinder\Search;
 
 use Symfony\Component\DomCrawler\Crawler;
 
-trait ExtractContentFromUrlProvider
+trait CrawlerInformationExtractor
 {
     public function initDomCrawler(string $url): Crawler
     {
         return new Crawler($this->fileGetContentsCurl($url));
+    }
+
+    public function findAttribute(Crawler $crawler, string $attribute): ?string
+    {
+        if (0 === $crawler->count()) {
+
+            return null;
+        }
+
+        return $crawler->attr($attribute);
+    }
+
+    public function findText(Crawler $crawler): ?string
+    {
+        if (0 === $crawler->count()) {
+
+            return null;
+        }
+
+        return $crawler->text();
     }
 
     private function fileGetContentsCurl(string $url): string

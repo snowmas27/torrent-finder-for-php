@@ -4,15 +4,16 @@ namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
+use TorrentFinder\Provider\ResultSet\ProviderResults;
 use TorrentFinder\Provider\ResultSet\TorrentData;
-use TorrentFinder\Search\ExtractContentFromUrlProvider;
+use TorrentFinder\Search\CrawlerInformationExtractor;
 use TorrentFinder\Search\SearchQueryBuilder;
 use TorrentFinder\VideoSettings\SizeFactory;
 use TorrentFinder\VideoSettings\Resolution;
 
 class ThePirateBay implements Provider
 {
-    use ExtractContentFromUrlProvider;
+    use CrawlerInformationExtractor;
     private $providerInformation;
 
     public function __construct(ProviderInformation $providerInformation)
@@ -22,7 +23,7 @@ class ThePirateBay implements Provider
 
     public function search(SearchQueryBuilder $keywords): array
     {
-        $results = [];
+        $results = new ProviderResults();
         $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->urlize());
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('table#searchResult tr') as $item) {
@@ -48,7 +49,7 @@ class ThePirateBay implements Provider
                 continue;
             }
 
-            $results[] = new ProviderResult(
+            $results->add(new ProviderResult(
                 $this->providerInformation->getName(),
                 new TorrentData(
                     $title,
@@ -57,10 +58,10 @@ class ThePirateBay implements Provider
                     Resolution::guessFromString($title)
                 ),
                 SizeFactory::convertFromWeirdFormat($match[1], $match[2])
-            );
+            ));
         }
 
-        return $results;
+        return $results->getResults();
     }
 
     public function getName(): string

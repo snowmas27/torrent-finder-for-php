@@ -2,6 +2,7 @@
 
 namespace TorrentFinder\Command;
 
+use Symfony\Component\Console\Input\InputOption;
 use TorrentFinder\Search\SearchOnProviders;
 use TorrentFinder\Search\SearchQuery;
 use TorrentFinder\Search\SearchQueryBuilder;
@@ -27,6 +28,12 @@ class ManualSearchCommand extends Command
             ->setName('search:manual')
             ->addArgument('query', InputArgument::REQUIRED, 'Query to search')
             ->addArgument('resolution', InputArgument::OPTIONAL, 'Resolution (2160p|1080p|720p)')
+            ->addOption(
+                'providers',
+                'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Search only in the listed provider'
+            )
+            ->addOption('forceRefresh', 'f', InputOption::VALUE_NONE)
         ;
     }
 
@@ -39,11 +46,12 @@ class ManualSearchCommand extends Command
 
         $results = $this->searchOnProviders->search([
                 new SearchQueryBuilder(new SearchQuery($input->getArgument('query')), $resolution)
-            ]
+            ],
+            $input->getOptions()
         );
 
         foreach ($results->getResults() as $result) {
-            $output->writeln(json_encode($result->getTorrentMetaData()->toArray()));
+            $output->writeln(json_encode($result->toArray()));
         }
 
         return 1;

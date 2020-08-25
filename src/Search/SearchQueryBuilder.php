@@ -39,6 +39,11 @@ class SearchQueryBuilder
         return $query;
     }
 
+    public function getSearchKeywordsWithoutResolution(): string
+    {
+        return trim($this->query);
+    }
+
     public function addKeywords(string $keywords): void
     {
         $this->customKeywords = $keywords;
@@ -49,12 +54,18 @@ class SearchQueryBuilder
         return str_replace(' ', $char, $this->getSearchKeywords());
     }
 
-    public function urlEncode(): string
+    public function urlEncode(bool $withResolution = true): string
     {
-        return urlencode($this->getSearchKeywords());
+        return urlencode($withResolution ? $this->getSearchKeywords() : $this->getSearchKeywordsWithoutResolution());
     }
+
     public function rawUrlEncode(): string
     {
         return rawurlencode($this->getSearchKeywords());
+    }
+
+    public function getResolution(): Resolution
+    {
+        return Resolution::guessFromString($this->resolution);
     }
 }
