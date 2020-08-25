@@ -4,6 +4,7 @@ namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
+use TorrentFinder\Provider\ResultSet\ProviderResults;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\CrawlerInformationExtractor;
 use TorrentFinder\Search\SearchQueryBuilder;
@@ -23,7 +24,7 @@ class TorrentGalaxy implements Provider
 
     public function search(SearchQueryBuilder $keywords): array
     {
-        $results = [];
+        $results = new ProviderResults();
         $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->urlize());
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('div.tgxtablerow') as $item) {
@@ -36,10 +37,10 @@ class TorrentGalaxy implements Provider
                 (int) $cell->eq(10)->filter('span > font')->text(),
                 Resolution::guessFromString($title)
             );
-            $results[] = new ProviderResult($this->providerInformation->getName(), $metaData, Size::fromHumanSize($cell->eq(7)->text()));
+            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, Size::fromHumanSize($cell->eq(7)->text())));
         }
 
-        return $results;
+        return $results->getResults();
     }
 
     public function getName(): string

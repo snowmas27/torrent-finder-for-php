@@ -4,6 +4,7 @@ namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
+use TorrentFinder\Provider\ResultSet\ProviderResults;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\CrawlerInformationExtractor;
 use TorrentFinder\Search\SearchQueryBuilder;
@@ -22,7 +23,7 @@ class Animetosho implements Provider
 
     public function search(SearchQueryBuilder $keywords): array
     {
-        $results = [];
+        $results = new ProviderResults();
         $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->urlize());
         $crawler = $this->initDomCrawler($url);
 
@@ -45,10 +46,10 @@ class Animetosho implements Provider
                 10,
                 Resolution::guessFromString($itemCrawler->filter('title')->text())
             );
-            $results[] = new ProviderResult($this->providerInformation->getName(), $metaData, Size::fromHumanSize($match[1]));
+            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, Size::fromHumanSize($match[1])));
         }
 
-        return $results;
+        return $results->getResults();
     }
 
     public function getName(): string

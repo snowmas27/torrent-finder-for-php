@@ -4,6 +4,7 @@ namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
+use TorrentFinder\Provider\ResultSet\ProviderResults;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\CrawlerInformationExtractor;
 use TorrentFinder\Search\SearchQueryBuilder;
@@ -23,7 +24,7 @@ class Nyaa implements Provider
 
     public function search(SearchQueryBuilder $keywords): array
     {
-        $results = [];
+        $results = new ProviderResults();
         $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->urlize());
         $crawler = $this->initDomCrawler($url);
         /** @var \DOMElement $domElement */
@@ -39,9 +40,9 @@ class Nyaa implements Provider
                 $td->eq(5)->text(),
                 Resolution::guessFromString($title)
             );
-            $results[] = new ProviderResult($this->providerInformation->getName(), $metaData, $size);
+            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
         }
-        return $results;
+        return $results->getResults();
     }
 
     public function getName(): string

@@ -4,6 +4,7 @@ namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
+use TorrentFinder\Provider\ResultSet\ProviderResults;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\CrawlerInformationExtractor;
 use TorrentFinder\Search\SearchQueryBuilder;
@@ -23,7 +24,7 @@ class LimeTorrents implements Provider
 
     public function search(SearchQueryBuilder $keywords): array
     {
-        $results = [];
+        $results = new ProviderResults();
         $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->rawUrlEncode());
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('channel > item') as $item) {
@@ -42,9 +43,9 @@ class LimeTorrents implements Provider
                 $currentSeeds,
                 Resolution::guessFromString($title)
             );
-            $results[] = new ProviderResult($this->providerInformation->getName(), $metaData, $size);
+            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
         }
-        return $results;
+        return $results->getResults();
     }
 
     public function getName(): string

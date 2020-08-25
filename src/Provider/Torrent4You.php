@@ -4,6 +4,7 @@ namespace TorrentFinder\Provider;
 
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
+use TorrentFinder\Provider\ResultSet\ProviderResults;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\CrawlerInformationExtractor;
 use TorrentFinder\Search\SearchQueryBuilder;
@@ -23,7 +24,7 @@ class Torrent4You implements Provider
 
    public function search(SearchQueryBuilder $keywords): array
    {
-      $results = [];
+       $results = new ProviderResults();
        $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), strtolower($keywords->urlEncode()));
       /** @var Crawler $crawler */
       $crawler = $this->initDomCrawler($url);
@@ -42,7 +43,7 @@ class Torrent4You implements Provider
                continue;
            }
 
-           $results[] = new ProviderResult(
+           $results->add(new ProviderResult(
                $this->providerInformation->getName(),
                new TorrentData(
                    $title,
@@ -51,10 +52,10 @@ class Torrent4You implements Provider
                    Resolution::guessFromString($title)
                ),
                SizeFactory::fromHumanSize($humanSize)
-           );
+           ));
        }
 
-      return $results;
+      return $results->getResults();
    }
 
    private function getHash(string $torrentPage): ?string
