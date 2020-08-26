@@ -47,7 +47,7 @@ parameters:
             class: TorrentFinder\Provider\Torrent4You
         torrent9:
             name: 'torrent9'
-            searchUrl: 'https://ww1.torrent9.is/search_torrent/%s.html,trie-seeds-d'
+            searchUrl: 'https://www.torrent9.so/recherche/%s'
             class: TorrentFinder\Provider\Torrent9
         torrentgalaxy:
             name: 'torrentgalaxy'

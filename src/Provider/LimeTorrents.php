@@ -29,20 +29,36 @@ class LimeTorrents implements Provider
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('channel > item') as $item) {
             $crawlerResultList = new Crawler($item);
-            $title = $crawlerResultList->filter('title')->text();
+            $title = $this->findText($crawlerResultList->filter('title'));
             preg_match(
                 '/Seeds: (\d+)/i',
-                $crawlerResultList->filter('description')->text(),
+                $this->findText($crawlerResultList->filter('description')),
                 $match
             );
             $currentSeeds = $match[1] ?? 0;
-            $size = new Size((int) $crawlerResultList->filter('size')->text());
-            $metaData = new TorrentData(
-                $title,
-                (string) $crawlerResultList->filterXPath('//enclosure/@url')->text(),
-                $currentSeeds,
-                Resolution::guessFromString($title)
-            );
+            $size = new Size((int) $this->findText($crawlerResultList->filter('size')));
+            $link = $this->findText($crawlerResultList->filter('comments'));
+
+            if (!$link) {
+                continue;
+            }
+
+            $linkCrawler = $this->initDomCrawler($link);
+
+            $href = null;
+            foreach ($linkCrawler->filter('div.dltorrent') as $item) {
+                $itemCrawler = new Crawler($item);
+                $href = $this->findAttribute($itemCrawler->filter('a'), 'href');
+
+                if (false !== strpos($href, 'magnet:', 0)) {
+                    break;
+                }
+            }
+
+            if (!$href) {
+                continue;
+            }
+            $metaData = new TorrentData($title, $href, $currentSeeds, Resolution::guessFromString($title));
             $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
         }
         return $results->getResults();
