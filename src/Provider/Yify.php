@@ -35,7 +35,6 @@ class Yify implements Provider
         }
 
         $pageLink = $this->findAttribute($crawler->filter('div.browse-content section div.row a.browse-movie-link'), 'href');
-
         if (null === $pageLink) {
 
             return [];
