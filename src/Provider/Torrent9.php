@@ -39,7 +39,7 @@ class Torrent9 implements Provider
             foreach ($detailPageCrawler->filter('div.download-btn') as $itemDetailPage) {
                 $itemCrawlerDetailPage = new Crawler($itemDetailPage);
 
-                if (false === preg_match('/^magnet:\?/i', $itemCrawlerDetailPage->filter('a')->attr('href'))) {
+                if (!preg_match('/^magnet:\?/i', $itemCrawlerDetailPage->filter('a')->attr('href'))) {
                     continue;
                 }
                 $magnet = $itemCrawlerDetailPage->filter('a')->attr('href');
@@ -49,7 +49,7 @@ class Torrent9 implements Provider
                 continue;
             }
 
-            $sizeValue = (float) $itemCrawler->filter('td')->eq(1)->text();
+            $sizeValue = $itemCrawler->filter('td')->eq(1)->text();
             $results->add(new ProviderResult(
                 $this->providerInformation->getName(),
                 $metaData = new TorrentData(
@@ -61,13 +61,7 @@ class Torrent9 implements Provider
                     ,
                     Resolution::guessFromString($title)
                 ),
-                SizeFactory::fromHumanSize(
-                    sprintf(
-                        '%s %s',
-                        $sizeValue,
-                        $sizeValue > 1000 ? Size::UNIT_GB : Size::UNIT_MB
-                    )
-                )
+                SizeFactory::fromHumanSize($sizeValue)
             ));
         }
 
