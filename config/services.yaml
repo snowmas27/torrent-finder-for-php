@@ -15,7 +15,7 @@ parameters:
             class: TorrentFinder\Provider\Animetosho
         btdb:
             name: 'btdb'
-            searchUrl: 'https://btdb.io/search/%s/?sort=popular'
+            searchUrl: 'https://btdb.eu/search/%s/?sort=popular'
             class: TorrentFinder\Provider\Btdb
         extratorrent:
             name: 'extratorrent'
