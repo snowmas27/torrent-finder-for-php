@@ -35,7 +35,8 @@ class Torlock implements Provider
                 continue;
             }
 
-            $title = $cell->eq(0)->text();
+            $title = str_replace(['<mark>', '</mark>'], ' ', $cell->eq(0)->filter('a')->filter('b')->html());
+            $title = str_replace('  ', ' ', $title);
 
             if (0 === $cell->eq(2)->count()) {
                 continue;
