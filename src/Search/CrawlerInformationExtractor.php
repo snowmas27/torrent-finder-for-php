@@ -52,6 +52,7 @@ trait CrawlerInformationExtractor
             throw new \UnexpectedValueException("$url is Cloudflare protected");
         }
 
+
         return $data;
     }
 }

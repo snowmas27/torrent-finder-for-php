@@ -6,6 +6,18 @@ class SizeFactory
 {
     public static function fromHumanSize(string $humanSize): Size
     {
+        if (!strpos($humanSize, ' ')) {
+            $result = preg_replace(
+                sprintf(
+                    '/^([\.\d]+)(%s)$/i',
+                    implode('|', ['KO', 'MO', 'MIBYTE', 'MIB', 'MB', 'MBS', 'GO', 'GIBYTE', 'GIB', 'GB', 'GBS'])
+                ),
+                '$1 $2',
+                $humanSize
+            );
+            $humanSize = $humanSize !== $result ? $result : $humanSize;
+        }
+
         [$value, $unit] = explode(' ', $humanSize);
 
         return self::convertFromWeirdFormat($value, $unit);
