@@ -29,7 +29,6 @@ class GkTorrents implements Provider
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('div.block-detail')->nextAll()->filter('tbody > tr') as $item) {
             $crawlerResultList = new Crawler($item);
-            $title = trim($crawlerResultList->filter('td.liste-accueil-nom')->text());
             $humanSize = $crawlerResultList->filter('td.liste-accueil-taille')->text();
             $seeds = $crawlerResultList->filter('td.liste-accueil-sources')->text();
             $crawlerDetailPage = $this->initDomCrawler(
@@ -41,6 +40,7 @@ class GkTorrents implements Provider
             );
 
             $magnet = $crawlerDetailPage->filter('div.btn-magnet a')->attr('href');
+            $title = $crawlerDetailPage->filter('div#torrentsdesc div.release')->text();
 
             if (null === $magnet) {
                 continue;
