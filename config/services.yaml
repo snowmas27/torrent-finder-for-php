@@ -21,6 +21,10 @@ parameters:
             name: 'extratorrent'
             searchUrl: 'https://xtra.unblocked.lol/search/?search=%s&new=1&x=0&y=0'
             class: TorrentFinder\Provider\Extratorrent
+        gktorrents:
+            name: 'gktorrents'
+            searchUrl: 'https://www.gktorrents.com/recherche/%s'
+            class: TorrentFinder\Provider\GkTorrents
         magnet4you:
             name: 'magnet4you'
             searchUrl: 'https://magnet4you.me/search.php?s=%s&sort=seed'
