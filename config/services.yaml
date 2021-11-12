@@ -25,6 +25,10 @@ parameters:
             name: 'gktorrents'
             searchUrl: 'https://www.gktorrents.com/recherche/%s'
             class: TorrentFinder\Provider\GkTorrents
+        kickasstorrents:
+            name: 'kickasstorrents'
+            searchUrl: 'https://kickasstorrents.to/usearch/%s/?sortby=seeders&sort=desc'
+            class: TorrentFinder\Provider\KickassTorrents
         magnet4you:
             name: 'magnet4you'
             searchUrl: 'https://magnet4you.me/search.php?s=%s&sort=seed'
