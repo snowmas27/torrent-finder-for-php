@@ -7,6 +7,7 @@ Torrent finder for PHP is a movie and TvShow search engine based on various torr
 * Lime torrents
 * Magnet4You
 * Nyaa
+* Oxtorrent
 * The Pirate Bay
 * Torlock
 * Torrent4You
