@@ -54,7 +54,7 @@ class SearchResults
     private function sortBySeeds(array $results): array
     {
         usort($results, function(ProviderResult $a, ProviderResult $b) {
-            return $a->getTorrentMetaData()->getSeeds() < $b->getTorrentMetaData()->getSeeds();
+            return $a->getTorrentMetaData()->getSeeds() < $b->getTorrentMetaData()->getSeeds() ? 1 : -1;
         });
 
         return $results;
