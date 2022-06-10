@@ -27,7 +27,7 @@ parameters:
             class: TorrentFinder\Provider\GkTorrents
         kickasstorrents:
             name: 'kickasstorrents'
-            searchUrl: 'https://kickasstorrents.to/usearch/%s/?sortby=seeders&sort=desc'
+            searchUrl: 'https://katcr.to/usearch/%s/'
             class: TorrentFinder\Provider\KickassTorrents
         magnet4you:
             name: 'magnet4you'
@@ -43,7 +43,7 @@ parameters:
             class: TorrentFinder\Provider\LimeTorrents
         thepiratebay:
             name: 'thepiratebay'
-            searchUrl: 'https://openpirate.org/search/%s/0/7/0'
+            searchUrl: 'https://thepiratebay.org/search.php?q=%s'
             class: TorrentFinder\Provider\ThePirateBay
         torlock:
             name: 'torlock'
