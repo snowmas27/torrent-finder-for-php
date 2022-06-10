@@ -26,10 +26,10 @@ class Torrent9 implements Provider
     public function search(SearchQueryBuilder $keywords): array
     {
         $results = new ProviderResults();
-        $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->urlize());
+        $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->urlize('-'));
         /** @var Crawler $crawler */
         $crawler = $this->initDomCrawler($url);
-        foreach ($crawler->filter('table.cust-table')->filter('tr') as $item) {
+        foreach ($crawler->filter('div.table-responsive table')->filter('tr') as $item) {
             $itemCrawler = new Crawler($item);
             $detailPageCrawler = $this->initDomCrawler(
                 $this->providerInformation->getSearchUrl()->getBaseUrl() . $itemCrawler->filter('a')->attr('href')
@@ -53,7 +53,7 @@ class Torrent9 implements Provider
             $results->add(new ProviderResult(
                 $this->providerInformation->getName(),
                 $metaData = new TorrentData(
-                    $title = trim($itemCrawler->filter('a')->text()),
+                    $title = trim($detailPageCrawler->filter('p.description_torrent')->text()),
                     $magnet,
                     $itemCrawler->filter('.seed_ok')->count() === 1
                         ? (int) $itemCrawler->filter('.seed_ok')->text()

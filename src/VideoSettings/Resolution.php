@@ -29,7 +29,7 @@ class Resolution
     public static function guessFromString(string $query): self
     {
         if (!preg_match(sprintf('/(%s)/i', implode('|', self::RESOLUTIONS)), strtolower($query), $match)) {
-            
+
             return new static(self::LD);
         }
 

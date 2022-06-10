@@ -21,6 +21,14 @@ parameters:
             name: 'extratorrent'
             searchUrl: 'https://xtra.unblocked.lol/search/?search=%s&new=1&x=0&y=0'
             class: TorrentFinder\Provider\Extratorrent
+        gktorrents:
+            name: 'gktorrents'
+            searchUrl: 'https://www.gktorrents.com/recherche/%s'
+            class: TorrentFinder\Provider\GkTorrents
+        kickasstorrents:
+            name: 'kickasstorrents'
+            searchUrl: 'https://kickasstorrents.to/usearch/%s/?sortby=seeders&sort=desc'
+            class: TorrentFinder\Provider\KickassTorrents
         magnet4you:
             name: 'magnet4you'
             searchUrl: 'https://magnet4you.me/search.php?s=%s&sort=seed'
@@ -47,7 +55,7 @@ parameters:
             class: TorrentFinder\Provider\Torrent4You
         torrent9:
             name: 'torrent9'
-            searchUrl: 'https://www.torrent9.so/recherche/%s'
+            searchUrl: 'https://torrent9.to/search_torrent/%s.html'
             class: TorrentFinder\Provider\Torrent9
         torrentgalaxy:
             name: 'torrentgalaxy'
