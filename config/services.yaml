@@ -59,7 +59,7 @@ parameters:
             class: TorrentFinder\Provider\Torrent4You
         torrent9:
             name: 'torrent9'
-            searchUrl: 'https://torrent9.to/search_torrent/%s.html'
+            searchUrl: 'https://torrent9.re/recherche/%s'
             class: TorrentFinder\Provider\Torrent9
         torrentgalaxy:
             name: 'torrentgalaxy'

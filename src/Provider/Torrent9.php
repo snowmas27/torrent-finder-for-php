@@ -32,7 +32,7 @@ class Torrent9 implements Provider
         foreach ($crawler->filter('div.table-responsive table')->filter('tr') as $item) {
             $itemCrawler = new Crawler($item);
             $detailPageCrawler = $this->initDomCrawler(
-                $this->providerInformation->getSearchUrl()->getBaseUrl() . $itemCrawler->filter('a')->attr('href')
+                $itemCrawler->filter('a')->attr('href')
             );
 
             $magnet = null;
@@ -45,6 +45,7 @@ class Torrent9 implements Provider
                 $magnet = $itemCrawlerDetailPage->filter('a')->attr('href');
             }
 
+
             if (null === $magnet) {
                 continue;
             }
@@ -53,7 +54,7 @@ class Torrent9 implements Provider
             $results->add(new ProviderResult(
                 $this->providerInformation->getName(),
                 $metaData = new TorrentData(
-                    $title = trim($detailPageCrawler->filter('p.description_torrent')->text()),
+                    $title = trim($itemCrawler->filter('td')->eq(0)->text()),
                     $magnet,
                     $itemCrawler->filter('.seed_ok')->count() === 1
                         ? (int) $itemCrawler->filter('.seed_ok')->text()
