@@ -28,7 +28,7 @@ trait CrawlerInformationExtractor
             return null;
         }
 
-        return $crawler->text();
+        return trim($crawler->text());
     }
 
     private function fileGetContentsCurl(string $url): string

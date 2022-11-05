@@ -77,6 +77,10 @@ parameters:
             name: 'zooqle'
             searchUrl: 'https://zooqle.com/search?q=%s&fmt=rss'
             class: TorrentFinder\Provider\Zooqle
+        yggtorrent:
+            name: 'yggtorrent'
+            searchUrl: 'https://www2.yggtorrent.co/search_torrent/%s.html'
+            class: TorrentFinder\Provider\YggTorrent
 
 services:
     # default configuration for services in *this* file

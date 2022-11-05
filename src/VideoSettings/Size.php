@@ -8,19 +8,30 @@ class Size
 {
     const UNIT_KB = 'KB';
     const UNIT_MB = 'MB';
+    const UNIT_MO = 'MO';
     const UNIT_GB = 'GB';
+    const UNIT_GO = 'GO';
     private $bytes;
+
+    const SIZE_LIST = [
+        self::UNIT_KB,
+        self::UNIT_MB,
+        self::UNIT_MO,
+        self::UNIT_GB,
+        self::UNIT_GO
+    ];
 
     public static function fromHumanSize(string $humanSize): self
     {
-        preg_match(sprintf('/([\d\.]+).*(%s|%s|%s)/', self::UNIT_MB, self::UNIT_KB, self::UNIT_GB), $humanSize, $match);
+        preg_match(sprintf('/([\d\.]+).*(%s)/i', implode('|', self::SIZE_LIST)), $humanSize, $match);
 
         if (!isset($match[1])) {
             throw new \UnexpectedValueException($humanSize);
         }
-        Ensure::sizeUnitAllowed($match[2]);
+        $sizeUnit = strtoupper($match[2]);
+        Ensure::sizeUnitAllowed($sizeUnit);
 
-        return new static(self::convertToBytes($match[1], $match[2]));
+        return new static(self::convertToBytes($match[1], $sizeUnit));
     }
 
     public function __construct(float $bytes)
@@ -73,11 +84,11 @@ class Size
             return $value * 1024 ** 1;
         }
 
-        if ($unit === self::UNIT_MB) {
+        if ($unit === self::UNIT_MB || $unit === self::UNIT_MO) {
             return $value * 1024 ** 2;
         }
 
-        if ($unit === self::UNIT_GB) {
+        if ($unit === self::UNIT_GB || $unit === self::UNIT_GO) {
             return $value * 1024 ** 3;
         }
     }

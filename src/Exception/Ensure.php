@@ -9,7 +9,7 @@ class Ensure extends Assertion
 {
     public static function sizeUnitAllowed(string $sizeUnit)
     {
-        if ($sizeUnit !== Size::UNIT_MB && $sizeUnit !== Size::UNIT_GB && $sizeUnit !== Size::UNIT_KB) {
+        if (!in_array($sizeUnit, Size::SIZE_LIST)) {
             throw new UnsupportedSizeUnit();
         }
     }
