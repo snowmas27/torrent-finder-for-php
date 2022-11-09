@@ -2,8 +2,6 @@
 
 namespace TorrentFinder\Provider;
 
-use http\Exception\InvalidArgumentException;
-use PHPUnit\Exception;
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
 use TorrentFinder\Provider\ResultSet\ProviderResults;
@@ -51,7 +49,7 @@ class YggTorrent implements Provider
                     Resolution::guessFromString($title)
                 );
                 $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
-            } catch (\Exception | InvalidArgumentException $exception) {
+            } catch (\Exception $exception) {
                 continue;
             }
 
@@ -72,7 +70,7 @@ class YggTorrent implements Provider
             return $href;
         }
 
-        throw new InvalidArgumentException('No magnet was found');
+        throw new \InvalidArgumentException('No magnet was found');
     }
 
     public function getName(): string
