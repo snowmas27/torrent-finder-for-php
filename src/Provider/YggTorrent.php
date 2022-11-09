@@ -51,8 +51,8 @@ class YggTorrent implements Provider
                     Resolution::guessFromString($title)
                 );
                 $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
-            } catch (\Exception $exception) {
-
+            } catch (\Exception | InvalidArgumentException $exception) {
+                continue;
             }
 
         }
