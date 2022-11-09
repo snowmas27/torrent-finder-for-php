@@ -2,6 +2,7 @@
 
 namespace TorrentFinder\Provider;
 
+use http\Exception\InvalidArgumentException;
 use PHPUnit\Exception;
 use Symfony\Component\DomCrawler\Crawler;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
@@ -71,7 +72,7 @@ class YggTorrent implements Provider
             return $href;
         }
 
-        return null;
+        throw new InvalidArgumentException('No magnet was found');
     }
 
     public function getName(): string
