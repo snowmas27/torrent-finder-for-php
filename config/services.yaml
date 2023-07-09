@@ -69,10 +69,6 @@ parameters:
             name: 'yify'
             searchUrl: 'https://yts.mx/browse-movies/%s/all/all/0/latest/0/all'
             class: TorrentFinder\Provider\Yify
-        #        torrentz2:
-        #            name: 'torrentz2'
-        #            searchUrl: 'https://torrentz2.io/feed?f=%s'
-        #            class: TorrentFinder\Provider\Torrentz2
         zooqle:
             name: 'zooqle'
             searchUrl: 'https://zooqle.com/search?q=%s&fmt=rss'
@@ -81,6 +77,13 @@ parameters:
             name: 'yggtorrent'
             searchUrl: 'https://www2.yggtorrent.co/search_torrent/%s.html'
             class: TorrentFinder\Provider\YggTorrent
+        # Jackett torrent trackers
+    jackett_indexers:
+            - thepiratebay
+            - kickasstorrents-ws
+            - bitsearch
+            - extratorrent-st
+            - badasstorrents
 
 services:
     # default configuration for services in *this* file
@@ -101,3 +104,13 @@ services:
     TorrentFinder\Search\SearchOnProviders:
         arguments:
             $providersConfigurations: '@TorrentFinder\Provider\ProvidersConfiguration'
+
+    TorrentFinder\Provider\Jackett\JackettUrlBuilder:
+        arguments:
+            $host: '%env(resolve:JACKETT_HOST)%'
+            $port: '%env(resolve:JACKETT_PORT)%'
+            $apikey: '%env(resolve:JACKETT_APIKEY)%'
+
+    TorrentFinder\Provider\Jackett\JackettIndexerList:
+        arguments:
+            $indexerList: '%jackett_indexers%'

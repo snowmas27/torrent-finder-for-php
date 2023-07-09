@@ -3,6 +3,7 @@
 namespace TorrentFinder\Command;
 
 use Symfony\Component\Console\Input\InputOption;
+use TorrentFinder\Provider\Jackett\JackettUrlBuilder;
 use TorrentFinder\Search\SearchOnProviders;
 use TorrentFinder\Search\SearchQuery;
 use TorrentFinder\Search\SearchQueryBuilder;
@@ -15,11 +16,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ManualSearchCommand extends Command
 {
     private $searchOnProviders;
+    private $builder;
 
-    public function __construct(SearchOnProviders $searchOnProviders)
+    public function __construct(SearchOnProviders $searchOnProviders, JackettUrlBuilder $builder)
     {
         parent::__construct();
         $this->searchOnProviders = $searchOnProviders;
+        $this->builder = $builder;
     }
 
     protected function configure(): void

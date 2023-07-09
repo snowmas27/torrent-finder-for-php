@@ -4,6 +4,9 @@ namespace TorrentFinder\Search;
 
 use Assert\Assertion;
 use TorrentFinder\Exception\Ensure;
+use TorrentFinder\Provider\Jackett\JackettGenericSearch;
+use TorrentFinder\Provider\Jackett\JackettIndexerList;
+use TorrentFinder\Provider\Jackett\JackettSearchOnIndexerList;
 use TorrentFinder\Provider\ProviderConfiguration;
 use TorrentFinder\Provider\ProviderFactory;
 use TorrentFinder\Provider\ProvidersConfiguration;
@@ -16,14 +19,17 @@ class SearchOnProviders
     private $providersConfigurations;
     private $providerFactory;
     private $cache;
+    private JackettSearchOnIndexerList $jackettSearchOnIndexerList;
 
     public function __construct(
         ProvidersConfiguration $providersConfigurations,
         ProviderFactory $providerFactory,
+        JackettSearchOnIndexerList $jackettSearchOnIndexerList,
         CacheInterface $cache
     ) {
         $this->providersConfigurations = $providersConfigurations;
         $this->providerFactory = $providerFactory;
+        $this->jackettSearchOnIndexerList = $jackettSearchOnIndexerList;
         $this->cache = $cache;
     }
 
@@ -57,10 +63,10 @@ class SearchOnProviders
                     printf("%s\n", $e->getMessage());
                 }
             }
+            $searchResults = array_merge($searchResults, $this->jackettSearchOnIndexerList->searchAll($queryBuilder));
         }
-        $searchResults = new SearchResults($searchResults);
-
-        return $searchResults;
+        
+        return new SearchResults($searchResults);
     }
 
     private function searchOnProvider(
