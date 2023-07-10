@@ -65,7 +65,7 @@ class SearchOnProviders
             }
             $searchResults = array_merge($searchResults, $this->jackettSearchOnIndexerList->searchAll($queryBuilder));
         }
-        
+
         return new SearchResults($searchResults);
     }
 
