@@ -4,8 +4,6 @@ namespace TorrentFinder\Search;
 
 use Assert\Assertion;
 use TorrentFinder\Exception\Ensure;
-use TorrentFinder\Provider\Jackett\JackettGenericSearch;
-use TorrentFinder\Provider\Jackett\JackettIndexerList;
 use TorrentFinder\Provider\Jackett\JackettSearchOnIndexerList;
 use TorrentFinder\Provider\ProviderConfiguration;
 use TorrentFinder\Provider\ProviderFactory;
@@ -73,8 +71,7 @@ class SearchOnProviders
         SearchQueryBuilder $queryBuilder,
         ProviderConfiguration $providerConfiguration,
         bool $forceRefresh
-    ): array
-    {
+    ): array {
         if ($forceRefresh) {
 
             return $this->providerFactory->buildFromProviderConfiguration($providerConfiguration)->search($queryBuilder);

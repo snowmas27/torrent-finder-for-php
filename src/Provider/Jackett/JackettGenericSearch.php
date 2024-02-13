@@ -15,29 +15,51 @@ class JackettGenericSearch
 {
     use CrawlerInformationExtractor;
     private JackettUrlBuilder $url;
-    private string $indexer;
 
-    public function __construct(JackettUrlBuilder $url, string $indexer)
+    public function __construct(JackettUrlBuilder $url)
     {
         $this->url = $url;
-        $this->indexer = $indexer;
     }
 
     public function search(SearchQueryBuilder $keywords)
     {
         $results = new ProviderResults();
-        $url = sprintf($this->url->buildGenericUrl(), $this->indexer, $keywords->urlize());
+        $url = sprintf($this->url->buildGenericUrl(), $keywords->urlize());
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('channel > item') as $item) {
             $crawlerResultList = new Crawler($item);
-            $title = $this->findText($crawlerResultList->filter('title'));
-            $seeders = $this->findAttribute($crawlerResultList->filterXPath('//torznab:attr[@name="seeders"]'), 'value');
-            $size = new Size((int) $this->findText($crawlerResultList->filter('size')));
-            $magnet = $this->findAttribute($crawlerResultList->filterXPath('//torznab:attr[@name="magneturl"]'), 'value');
-            $metaData = new TorrentData($title, $magnet, $seeders, Resolution::guessFromString($title));
-            $results->add(new ProviderResult($this->indexer, $metaData, $size));
+            $indexer = $this->findAttribute($crawlerResultList->filter('jackettindexer'), 'id');
+            try {
+                $title = $this->findText($crawlerResultList->filter('title'));
+                $seeders = $this->findAttribute($crawlerResultList->filterXPath('//torznab:attr[@name="seeders"]'), 'value');
+                $size = new Size((int) $this->findText($crawlerResultList->filter('size')));
+                $magnet = $this->findMagnetUrl($crawlerResultList);
+                if ($magnet === null) {
+                    continue;
+                }
+                $metaData = new TorrentData($title, $magnet, $seeders, Resolution::guessFromString($title));
+                $results->add(new ProviderResult($indexer, $metaData, $size));
+            } catch (\Exception $e) {
+                printf('%s: %s', $indexer, $e->getMessage());
+            }
         }
 
         return $results->getResults();
+    }
+
+    private function findMagnetUrl(Crawler $crawler): ?string
+    {
+        $magnet = $this->findAttribute($crawler->filterXPath('//torznab:attr[@name="magneturl"]'), 'value');
+        if ($magnet !== null) {
+            return $magnet;
+        }
+        $urlCrawler = null !== $crawler->filter('comments') ? $crawler->filter('comments') : $crawler->filter('guid');
+        if ($urlCrawler === null) {
+            return null;
+        }
+
+        $magnet = $this->findFirstMagnetUrl($this->findText($urlCrawler));
+
+        return $magnet;
     }
 }

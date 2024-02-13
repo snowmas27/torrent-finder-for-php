@@ -103,7 +103,3 @@ services:
             $host: '%env(resolve:JACKETT_HOST)%'
             $port: '%env(resolve:JACKETT_PORT)%'
             $apikey: '%env(resolve:JACKETT_APIKEY)%'
-
-    TorrentFinder\Provider\Jackett\JackettIndexerList:
-        arguments:
-            $indexerList: '%env(resolve:JACKETT_INDEXERS)%'
