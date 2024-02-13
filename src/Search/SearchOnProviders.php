@@ -51,7 +51,7 @@ class SearchOnProviders
                 try {
                     $searchResults = array_merge(
                         $searchResults,
-                        $results = $this->searchOnProvider(
+                        $this->searchOnProvider(
                             $queryBuilder,
                             $providerConfiguration,
                             $forceRefresh
@@ -61,10 +61,28 @@ class SearchOnProviders
                     printf("%s\n", $e->getMessage());
                 }
             }
-            $searchResults = array_merge($searchResults, $this->jackettSearchOnIndexerList->searchAll($queryBuilder));
+            $searchResults = array_merge($searchResults, $this->searchOnJackett($queryBuilder, $forceRefresh));
         }
 
         return new SearchResults($searchResults);
+    }
+
+    private function searchOnJackett(SearchQueryBuilder $queryBuilder, bool $forceRefresh)
+    {
+        if ($forceRefresh) {
+
+            return $this->jackettSearchOnIndexerList->searchAll($queryBuilder);
+        }
+
+        return $this->cache->get(
+            sprintf('%s', $queryBuilder->urlize('-')),
+            function (ItemInterface $item) use ($queryBuilder) {
+                // Expire every 12h
+                $item->expiresAfter(12 * 60 * 60);
+
+                return $this->jackettSearchOnIndexerList->searchAll($queryBuilder);
+            }
+        );
     }
 
     private function searchOnProvider(
