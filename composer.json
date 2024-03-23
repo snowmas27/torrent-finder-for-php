@@ -1,64 +1,61 @@
 {
-    "name": "snowmas27/torrent-finder-for-php",
-    "authors": [
-        {
-            "name": "Thomas",
-            "email": "tringuede.dev@gmail.com"
-        }
-    ],
-    "type": "symfony-bundle",
-    "require": {
-        "php": "^8.0",
-        "ext-ctype": "*",
-        "ext-iconv": "*",
-        "beberlei/assert": "^3.3.1",
-        "doctrine/collections": "^1.6",
-        "symfony/console": "~4.2",
-        "symfony/css-selector": "4.4.*",
-        "symfony/dom-crawler": "4.4.*",
-        "symfony/dotenv": "4.4.*",
-        "symfony/flex": "~1.2",
-        "symfony/framework-bundle": "4.4.*",
-        "symfony/yaml": "4.4.*"
-    },
-    "require-dev": {
-        "symfony/phpunit-bridge": "^5.0"
-    },
-    "config": {
-        "preferred-install": {
-            "*": "dist"
-        },
-        "sort-packages": true,
-        "allow-plugins": {
-            "symfony/flex": true
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "TorrentFinder\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "TorrentFinder\\Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ]
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "4.4.*"
-        }
+  "name": "snowmas27/torrent-finder-for-php",
+  "authors": [
+    {
+      "name": "Thomas",
+      "email": "tringuede.dev@gmail.com"
     }
+  ],
+  "type": "symfony-bundle",
+  "require": {
+    "php": "^8.0",
+    "ext-ctype": "*",
+    "ext-iconv": "*",
+    "beberlei/assert": "^3.3.1",
+    "doctrine/collections": "^1.6",
+    "symfony/console": "^4.2",
+    "symfony/css-selector": "4.4.*",
+    "symfony/dom-crawler": "4.4.*",
+    "symfony/dotenv": "4.4.*",
+    "symfony/flex": "~1.2",
+    "symfony/framework-bundle": "4.4.*",
+    "symfony/yaml": "4.4.*"
+  },
+  "require-dev": {
+    "symfony/phpunit-bridge": "^5.0"
+  },
+  "config": {
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true,
+    "allow-plugins": {
+      "symfony/flex": true
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "TorrentFinder\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "TorrentFinder\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "auto-scripts": {},
+    "post-install-cmd": [
+      "@auto-scripts"
+    ],
+    "post-update-cmd": [
+      "@auto-scripts"
+    ]
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": false,
+      "require": "4.4.*"
+    }
+  }
 }
