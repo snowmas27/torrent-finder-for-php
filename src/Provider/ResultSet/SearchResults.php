@@ -64,6 +64,16 @@ class SearchResults
         return $this->summary;
     }
 
+    public function toArray(): array
+    {
+        $results = [];
+        foreach ($this->getResults() as $result) {
+            $results[] = $result->toArray();
+        }
+
+        return $results;
+    }
+
     /**
      * @return ProviderResult[]
      */
