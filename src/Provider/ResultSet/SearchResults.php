@@ -2,14 +2,30 @@
 
 namespace TorrentFinder\Provider\ResultSet;
 
+use Assert\Assertion;
+
 class SearchResults
 {
     /** @var ProviderResult[] */
     private $results;
     private $summary;
 
+    /**
+     * @param ProviderResult[] $results
+     */
+    public static function fromArray(array $data): self
+    {
+        $results = [];
+        foreach ($data as $result) {
+            $results[] = ProviderResult::fromArray($result);
+        }
+
+        return new self($results);
+    }
+
     public function __construct(array $results)
     {
+        Assertion::allIsInstanceOf($results, ProviderResult::class);
         $this->results = $results;
         $this->updateSummary();
     }
@@ -29,9 +45,9 @@ class SearchResults
     {
         $results = [];
         foreach ($this->results as $result) {
-			if (null !== $resolutions && !in_array($result->getTorrentMetaData()->getFormat()->getValue(), $resolutions)) {
-				continue;								
-			}
+            if (null !== $resolutions && !in_array($result->getTorrentMetaData()->getFormat()->getValue(), $resolutions)) {
+                continue;
+            }
 
             if ($result->getTorrentMetaData()->getSeeds() < $seeds) {
                 continue;
@@ -53,7 +69,7 @@ class SearchResults
      */
     private function sortBySeeds(array $results): array
     {
-        usort($results, function(ProviderResult $a, ProviderResult $b) {
+        usort($results, function (ProviderResult $a, ProviderResult $b) {
             return $a->getTorrentMetaData()->getSeeds() < $b->getTorrentMetaData()->getSeeds() ? 1 : -1;
         });
 

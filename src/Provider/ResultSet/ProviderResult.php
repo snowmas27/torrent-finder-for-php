@@ -6,9 +6,17 @@ use TorrentFinder\VideoSettings\Size;
 
 class ProviderResult
 {
-    private $torrentMetaData;
-    private $size;
-    private $provider;
+    private TorrentData $torrentMetaData;
+    private Size $size;
+    private string $provider;
+
+    public static function fromArray(array $data): self
+    {
+        $size = Size::fromHumanSize($data['size']);
+        $torrentMetaData = TorrentData::fromArray($data['data']);
+
+        return new self($data['provider'], $torrentMetaData, $size);
+    }
 
     public function __construct(string $provider, TorrentData $torrentMetaData, Size $size)
     {

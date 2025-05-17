@@ -7,10 +7,20 @@ use TorrentFinder\VideoSettings\Resolution;
 
 class TorrentData
 {
-    private $title;
-    private $magnetURI;
-    private $seeds;
-    private $format;
+    private string $title;
+    private string $magnetURI;
+    private int $seeds;
+    private Resolution $format;
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['title'],
+            $data['magnetURI'],
+            $data['seeds'],
+            new Resolution($data['format'])
+        );
+    }
 
     public function __construct(string $title, string $magnetURI, int $seeds, Resolution $format)
     {
