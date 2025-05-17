@@ -17,7 +17,11 @@ class SearchResults
     {
         $results = [];
         foreach ($data as $result) {
-            $results[] = ProviderResult::fromArray($result);
+            try {
+                $results[] = ProviderResult::fromArray($result);
+            } catch (\Exception $e) {
+                continue;
+            }
         }
 
         return new self($results);
@@ -25,7 +29,9 @@ class SearchResults
 
     public function __construct(array $results)
     {
-        Assertion::allIsInstanceOf($results, ProviderResult::class);
+        if (!empty($results)) {
+            Assertion::allIsInstanceOf($results, ProviderResult::class);
+        }
         $this->results = $results;
         $this->updateSummary();
     }
