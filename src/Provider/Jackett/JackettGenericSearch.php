@@ -13,6 +13,7 @@ use TorrentFinder\VideoSettings\Size;
 
 class JackettGenericSearch
 {
+    const MAX_ITEMS_DEFAULT = 200;
     use CrawlerInformationExtractor;
     private JackettUrlBuilder $url;
 
@@ -21,10 +22,11 @@ class JackettGenericSearch
         $this->url = $url;
     }
 
-    public function search(SearchQueryBuilder $keywords)
+    public function search(SearchQueryBuilder $keywords, array $options = [])
     {
         $results = new ProviderResults();
         $url = sprintf($this->url->buildGenericUrl(), $keywords->urlize());
+        $maxItems = $options['jackettMaxResults'] ?? self::MAX_ITEMS_DEFAULT;
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('channel > item') as $item) {
             $crawlerResultList = new Crawler($item);
@@ -41,6 +43,10 @@ class JackettGenericSearch
                 $results->add(new ProviderResult($indexer, $metaData, $size));
             } catch (\Exception $e) {
                 printf('%s: %s', $indexer, $e->getMessage());
+            }
+
+            if (count($results->getResults()) >= $maxItems) {
+                break;
             }
         }
 

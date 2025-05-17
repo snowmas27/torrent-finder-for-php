@@ -13,12 +13,12 @@ class JackettSearchOnIndexerList
         $this->url = $url;
     }
 
-    public function searchAll(SearchQueryBuilder $keywords)
+    public function searchAll(SearchQueryBuilder $keywords, array $options = [])
     {
         $results = [];
         try {
             $generic = new JackettGenericSearch($this->url);
-            $results = $generic->search($keywords);
+            $results = $generic->search($keywords, $options);
         } catch (\Exception $e) {
             printf("%s\n", $e->getMessage());
         }

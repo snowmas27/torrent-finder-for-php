@@ -33,7 +33,8 @@ class ManualSearchCommand extends Command
             ->addArgument('resolution', InputArgument::OPTIONAL, 'Resolution (2160p|1080p|720p)')
             ->addOption(
                 'providers',
-                'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'p',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Search only in the listed provider'
             )
             ->addOption('forceRefresh', 'f', InputOption::VALUE_NONE)
@@ -44,10 +45,10 @@ class ManualSearchCommand extends Command
     {
         $resolution = $input->getArgument('resolution') ?
             new Resolution($input->getArgument('resolution'))
-            : Resolution::ld()
-        ;
+            : Resolution::ld();
 
-        $results = $this->searchOnProviders->search([
+        $results = $this->searchOnProviders->searchAll(
+            [
                 new SearchQueryBuilder(new SearchQuery($input->getArgument('query')), $resolution)
             ],
             $input->getOptions()
