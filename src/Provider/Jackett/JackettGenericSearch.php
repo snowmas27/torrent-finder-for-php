@@ -25,7 +25,6 @@ class JackettGenericSearch
     public function search(array $options = [])
     {
         $results = new ProviderResults();
-        dump('Searching on Jackett Generic Search: ' . $this->url);
         $maxItems = $options['jackettMaxResults'] ?? self::MAX_ITEMS_DEFAULT;
         $crawler = $this->initDomCrawler($this->url);
         foreach ($crawler->filter('channel > item') as $item) {
