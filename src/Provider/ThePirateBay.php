@@ -37,8 +37,7 @@ class ThePirateBay implements Provider
                 ->eq(1)
                 ->filter('a')
                 ->eq(1)
-                ->attr('href')
-            ;
+                ->attr('href');
             preg_match(
                 '/Size ([\.\w\s]+) (\w{2,3})/i',
                 $itemCrawler->filter('font.detDesc')->text(),
@@ -51,7 +50,7 @@ class ThePirateBay implements Provider
 
             $results->add(new ProviderResult(
                 $this->providerInformation->getName(),
-                new TorrentData(
+                TorrentData::fromMagnetURI(
                     $title,
                     $magnet,
                     (int) $itemCrawler->filter('td')->eq(2)->text(),

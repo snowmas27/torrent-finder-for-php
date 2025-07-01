@@ -40,7 +40,7 @@ class Animetosho implements Provider
                 continue;
             }
 
-            $metaData = new TorrentData(
+            $metaData = TorrentData::fromMagnetURI(
                 $itemCrawler->filter('title')->text(),
                 $itemCrawler->filter('enclosure')->attr('url'),
                 10,

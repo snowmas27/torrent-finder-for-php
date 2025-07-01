@@ -46,7 +46,7 @@ class GkTorrents implements Provider
                 continue;
             }
 
-            $metaData = new TorrentData(
+            $metaData = TorrentData::fromMagnetURI(
                 $title,
                 $magnet,
                 $seeds,

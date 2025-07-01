@@ -15,19 +15,19 @@ class JackettGenericSearch
 {
     const MAX_ITEMS_DEFAULT = 200;
     use CrawlerInformationExtractor;
-    private JackettUrlBuilder $url;
+    private string $url;
 
-    public function __construct(JackettUrlBuilder $url)
+    public function __construct(string $url)
     {
         $this->url = $url;
     }
 
-    public function search(SearchQueryBuilder $keywords, array $options = [])
+    public function search(array $options = [])
     {
         $results = new ProviderResults();
-        $url = sprintf($this->url->buildGenericUrl(), $keywords->urlize());
+        dump('Searching on Jackett Generic Search: ' . $this->url);
         $maxItems = $options['jackettMaxResults'] ?? self::MAX_ITEMS_DEFAULT;
-        $crawler = $this->initDomCrawler($url);
+        $crawler = $this->initDomCrawler($this->url);
         foreach ($crawler->filter('channel > item') as $item) {
             $crawlerResultList = new Crawler($item);
             $indexer = $this->findAttribute($crawlerResultList->filter('jackettindexer'), 'id');
@@ -36,10 +36,18 @@ class JackettGenericSearch
                 $seeders = $this->findAttribute($crawlerResultList->filterXPath('//torznab:attr[@name="seeders"]'), 'value');
                 $size = new Size((int) $this->findText($crawlerResultList->filter('size')));
                 $magnet = $this->findMagnetUrl($crawlerResultList);
-                if ($magnet === null) {
+
+                if ($magnet !== null) {
+                    $metaData = TorrentData::fromMagnetURI($title, $magnet, $seeders, Resolution::guessFromString($title));
+                    $results->add(new ProviderResult($indexer, $metaData, $size));
                     continue;
                 }
-                $metaData = new TorrentData($title, $magnet, $seeders, Resolution::guessFromString($title));
+
+                $torrentUrl = $this->findTorrentUrl($crawlerResultList);
+                if ($torrentUrl === null) {
+                    continue;
+                }
+                $metaData = TorrentData::fromTorrentUrl($title, $torrentUrl, $seeders, Resolution::guessFromString($title));
                 $results->add(new ProviderResult($indexer, $metaData, $size));
             } catch (\Exception $e) {
                 printf('%s: %s', $indexer, $e->getMessage());
@@ -67,5 +75,20 @@ class JackettGenericSearch
         $magnet = $this->findFirstMagnetUrl($this->findText($urlCrawler));
 
         return $magnet;
+    }
+    private function findTorrentUrl(Crawler $crawler): ?string
+    {
+        return $this->findText($crawler->filter('link'));
+        // if ($url !== null) {
+        //     return $url;
+        // }
+        // $urlCrawler = null !== $crawler->filter('comments') ? $crawler->filter('comments') : $crawler->filter('guid');
+        // if ($urlCrawler === null) {
+        //     return null;
+        // }
+
+        // $magnet = $this->findFirstMagnetUrl($this->findText($urlCrawler));
+
+        // return $magnet;
     }
 }

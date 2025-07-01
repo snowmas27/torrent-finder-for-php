@@ -45,7 +45,7 @@ class KickassTorrents implements Provider
             );
 
             $magnet = $crawlerDetailPage->filter('div.downloadButtonGroup a')->eq(0)->attr('href');
-            $metaData = new TorrentData(
+            $metaData = TorrentData::fromMagnetURI(
                 $title,
                 $magnet,
                 $seeds,

@@ -8,26 +8,60 @@ use TorrentFinder\VideoSettings\Resolution;
 class TorrentData
 {
     private string $title;
-    private string $magnetURI;
+    private ?string $magnetURI;
+    private ?string $torrentUrl;
     private int $seeds;
     private Resolution $format;
 
     public static function fromArray(array $data): self
     {
-        return new self(
-            $data['title'],
-            $data['magnetURI'],
-            $data['seeds'],
-            new Resolution($data['format'])
-        );
+        if (isset($data['magnetURI']) && !empty($data['magnetURI'])) {
+            return self::fromMagnetURI(
+                $data['title'],
+                $data['magnetURI'],
+                $data['seeds'],
+                new Resolution($data['format'])
+            );
+        }
+
+        if (isset($data['torrentUrl']) && !empty($data['torrentUrl'])) {
+            return self::fromTorrentUrl(
+                $data['title'],
+                $data['torrentUrl'],
+                $data['seeds'],
+                new Resolution($data['format'])
+            );
+        }
+
+        throw new \InvalidArgumentException('Either magnetURI or torrentUrl must be provided');
     }
 
-    public function __construct(string $title, string $magnetURI, int $seeds, Resolution $format)
+    public static function fromMagnetURI(string $title, string $magnetURI, int $seeds, Resolution $format): self
     {
-        Ensure::notEmpty($title, 'Title cannot be null');
-        Ensure::notEmpty($magnetURI, 'Magnet cannot be null');
+        return new self($title, $magnetURI, null, $seeds, $format);
+    }
+
+    public static function fromTorrentUrl(string $title, string $torrentUrl, int $seeds, Resolution $format): self
+    {
+        return new self($title, null, $torrentUrl, $seeds, $format);
+    }
+
+    public function __construct(string $title, ?string $magnetURI, ?string $torrentUrl, int $seeds, Resolution $format)
+    {
+        Ensure::notEmpty($title, 'Title cannot be empty');
+
+        // Exactly one of magnetURI or torrentUrl must be provided
+        if (empty($magnetURI) && empty($torrentUrl)) {
+            throw new \InvalidArgumentException('Either magnetURI or torrentUrl must be provided');
+        }
+
+        if (!empty($magnetURI) && !empty($torrentUrl)) {
+            throw new \InvalidArgumentException('Cannot provide both magnetURI and torrentUrl');
+        }
+
         $this->title = $title;
         $this->magnetURI = $magnetURI;
+        $this->torrentUrl = $torrentUrl;
         $this->seeds = $seeds;
         $this->format = $format;
     }
@@ -37,9 +71,24 @@ class TorrentData
         return $this->title;
     }
 
-    public function getMagnetURI(): string
+    public function getMagnetURI(): ?string
     {
         return $this->magnetURI;
+    }
+
+    public function getTorrentUrl(): ?string
+    {
+        return $this->torrentUrl;
+    }
+
+    public function hasUrl(): bool
+    {
+        return !empty($this->torrentUrl);
+    }
+
+    public function hasMagnetURI(): bool
+    {
+        return !empty($this->magnetURI);
     }
 
     public function getSeeds(): int
@@ -54,7 +103,7 @@ class TorrentData
 
     public function isEmpty(): bool
     {
-        if (empty($this->title) && empty($this->url) && empty($this->magnetURI) && $this->seeds === 0) {
+        if (empty($this->title) && empty($this->torrentUrl) && empty($this->magnetURI) && $this->seeds === 0) {
             return true;
         }
 
@@ -68,11 +117,20 @@ class TorrentData
 
     public function toArray(): array
     {
-        return [
+        $result = [
             'title' => $this->title,
-            'magnetURI' => $this->magnetURI,
             'seeds' => $this->seeds,
             'format' => $this->format->getValue(),
         ];
+
+        if ($this->magnetURI !== null) {
+            $result['magnetURI'] = $this->magnetURI;
+        }
+
+        if ($this->torrentUrl !== null) {
+            $result['torrentUrl'] = $this->torrentUrl;
+        }
+
+        return $result;
     }
 }

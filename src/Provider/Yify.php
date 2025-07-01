@@ -46,7 +46,7 @@ class Yify implements Provider
                 }
                 $results->add(new ProviderResult(
                     $this->getName(),
-                    new TorrentData($fullTitleResolution, $magnet, 100, $resolution),
+                    TorrentData::fromMagnetURI($fullTitleResolution, $magnet, 100, $resolution),
                     $size
                 ));
             }

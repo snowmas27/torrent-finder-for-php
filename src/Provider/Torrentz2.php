@@ -49,7 +49,7 @@ class Torrentz2 implements Provider
             } catch (\UnexpectedValueException $e) {
                 continue;
             }
-            $metaData = new TorrentData(
+            $metaData = TorrentData::fromMagnetURI(
                 trim($title),
                 sprintf(
                     'magnet:?xt=urn:btih:%s&dn=%s',

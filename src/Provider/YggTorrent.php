@@ -42,7 +42,7 @@ class YggTorrent implements Provider
                 $title = $this->findText($td->eq(0));
                 $size = Size::fromHumanSize($this->findText($td->eq(1)));
                 $seeds = $this->findText($td->eq(2));
-                $metaData = new TorrentData(
+                $metaData = TorrentData::fromMagnetURI(
                     $title,
                     $this->extractMagnet($crawlerDetailPage),
                     $seeds,
@@ -52,7 +52,6 @@ class YggTorrent implements Provider
             } catch (\Exception $exception) {
                 continue;
             }
-
         }
 
         return $results->getResults();

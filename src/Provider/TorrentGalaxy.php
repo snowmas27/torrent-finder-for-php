@@ -31,7 +31,7 @@ class TorrentGalaxy implements Provider
             $crawlerResultList = new Crawler($item);
             $cell = $crawlerResultList->filter('div.tgxtablecell');
 
-            $metaData = new TorrentData(
+            $metaData = TorrentData::fromMagnetURI(
                 $title = $cell->eq(3)->text(),
                 $cell->eq(4)->filter('a')->eq(1)->attr('href'),
                 (int) $cell->eq(10)->filter('span > font')->text(),

@@ -3,7 +3,6 @@
 namespace TorrentFinder\Provider\ResultSet;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Traversable;
 
 class ProviderResults implements \IteratorAggregate
 {
@@ -17,7 +16,7 @@ class ProviderResults implements \IteratorAggregate
 
     public function add(ProviderResult $providerResult): void
     {
-        $exists = $this->results->exists(function(int $key, ProviderResult $item) use ($providerResult) {
+        $exists = $this->results->exists(function (int $key, ProviderResult $item) use ($providerResult) {
             return $providerResult->getTorrentMetaData()->getMagnetURI() === $item->getTorrentMetaData()->getMagnetURI();
         });
 
@@ -33,7 +32,7 @@ class ProviderResults implements \IteratorAggregate
         return $this->results->toArray();
     }
 
-    public function getIterator(): iterable
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->results->toArray());
     }

@@ -53,13 +53,12 @@ class Torrent9 implements Provider
             $sizeValue = $itemCrawler->filter('td')->eq(1)->text();
             $results->add(new ProviderResult(
                 $this->providerInformation->getName(),
-                $metaData = new TorrentData(
+                $metaData = TorrentData::fromMagnetURI(
                     $title = trim($itemCrawler->filter('td')->eq(0)->text()),
                     $magnet,
                     $itemCrawler->filter('.seed_ok')->count() === 1
                         ? (int) $itemCrawler->filter('.seed_ok')->text()
-                        : 0
-                    ,
+                        : 0,
                     Resolution::guessFromString($title)
                 ),
                 SizeFactory::fromHumanSize($sizeValue)

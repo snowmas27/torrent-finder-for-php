@@ -33,6 +33,7 @@ class SearchOnProviders
 
     public function searchAll(array $queryBuilders, array $options = []): SearchResults
     {
+        $results = new SearchResults([]);
         $results = $this->searchOnProviders($queryBuilders, $options);
         $jackettResults = $this->searchOnJackett($queryBuilders, $options);
         $results = array_merge($results->getResults(), $jackettResults->getResults());
@@ -79,7 +80,15 @@ class SearchOnProviders
         Assertion::boolean($forceRefresh);
         $searchResults = [];
         foreach ($queryBuilders as $queryBuilder) {
-            $searchResults = array_merge($searchResults, $this->jackettSearchOnIndexerList->searchAll($queryBuilder, $options));
+            if (empty($options['jackett'])) {
+                $searchResults = array_merge($searchResults, $this->jackettSearchOnIndexerList->searchAll($queryBuilder, $options));
+                continue;
+            }
+
+            $searchResults = array_merge(
+                $searchResults,
+                $this->jackettSearchOnIndexerList->searchByIndexer($options['jackett'], $queryBuilder, $options)
+            );
         }
 
         return new SearchResults($searchResults);

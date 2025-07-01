@@ -43,7 +43,7 @@ class Provider1337x implements Provider
                 continue;
             }
 
-            $metaData = new TorrentData(
+            $metaData = TorrentData::fromMagnetURI(
                 $title = $td->eq(0)->filter('a')->eq(1)->text(),
                 $magnet,
                 $td->eq(1)->text(),

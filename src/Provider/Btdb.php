@@ -40,7 +40,7 @@ class Btdb implements Provider
                 $this->findText($itemMetaCrawler->eq(0)->filter('strong'))
             );
             $seeds = $this->findText($itemMetaCrawler->eq(2)->filter('strong'));
-            $metaData = new TorrentData($title, $magnet, $seeds, Resolution::guessFromString($title));
+            $metaData = TorrentData::fromMagnetURI($title, $magnet, $seeds, Resolution::guessFromString($title));
             $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
         }
 

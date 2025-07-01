@@ -40,7 +40,7 @@ class Magnet4You implements Provider
                     continue;
                 }
                 $currentSeeds = trim($this->findText($crawlerListResult->filterXPath('//td[5]')));
-                $metaData = new TorrentData(
+                $metaData = TorrentData::fromMagnetURI(
                     trim($title),
                     $magnet,
                     $currentSeeds,

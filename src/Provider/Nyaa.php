@@ -34,7 +34,7 @@ class Nyaa implements Provider
             $index = 2 === $td->eq(1)->filter('a')->count() ? 1 : 0;
             list($size, $unit) = explode(' ', $td->eq(3)->text());
             $size = SizeFactory::convertFromWeirdFormat($size, $unit);
-            $metaData = new TorrentData(
+            $metaData = TorrentData::fromMagnetURI(
                 $title = trim($td->eq(1)->filter('a')->eq($index)->text()),
                 $td->eq(2)->filter('a')->eq(1)->attr('href'),
                 $td->eq(5)->text(),

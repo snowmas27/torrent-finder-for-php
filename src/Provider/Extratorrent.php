@@ -36,7 +36,7 @@ class Extratorrent implements Provider
             $seeds = '---' === $seeds ? 0 : (int) $seeds;
             $title = trim($domCrawler->filterXPath('//td[3]/a[1]')->text());
             $magnet = trim($domCrawler->filter('a')->attr('href'));
-            $metaData = new TorrentData($title, $magnet, $seeds, Resolution::guessFromString($title));
+            $metaData = TorrentData::fromMagnetURI($title, $magnet, $seeds, Resolution::guessFromString($title));
             $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
         }
 

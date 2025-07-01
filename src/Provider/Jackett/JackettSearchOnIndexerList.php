@@ -17,8 +17,23 @@ class JackettSearchOnIndexerList
     {
         $results = [];
         try {
-            $generic = new JackettGenericSearch($this->url);
-            $results = $generic->search($keywords, $options);
+            $generic = new JackettGenericSearch($this->url->buildAllGenericUrl($keywords->urlize()));
+            $results = $generic->search($options);
+        } catch (\Exception $e) {
+            printf("%s\n", $e->getMessage());
+        }
+
+        return $results;
+    }
+
+    public function searchByIndexer(string $indexer, SearchQueryBuilder $keywords, array $options = [])
+    {
+        $results = [];
+        try {
+            $generic = new JackettGenericSearch(
+                $this->url->buildSearchByIndexerUrl($indexer, $keywords->urlize())
+            );
+            $results = $generic->search($options);
         } catch (\Exception $e) {
             printf("%s\n", $e->getMessage());
         }

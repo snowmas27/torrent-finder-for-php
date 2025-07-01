@@ -41,14 +41,13 @@ class Oxtorrent implements Provider
                     )
                 );
                 $magnet = $crawlerDetailPage->filter('div.btn-magnet > a')->attr('href');
-
             } catch (\Exception $exception) {
                 continue;
             }
             $results->add(
                 new ProviderResult(
                     $this->getName(),
-                    new TorrentData($title, $magnet, $seeds, Resolution::guessFromString($title)),
+                    TorrentData::fromMagnetURI($title, $magnet, $seeds, Resolution::guessFromString($title)),
                     $size
                 )
             );

@@ -34,7 +34,7 @@ class Zooqle implements Provider
             $length = $domCrawler->filterXPath('//torrent:contentLength')->text();
             $seeds = $domCrawler->filterXPath('//torrent:seeds')->text();
             $size = new Size((int) $length);
-            $metaData = new TorrentData(
+            $metaData = TorrentData::fromMagnetURI(
                 $title,
                 $domCrawler->filterXPath('//torrent:magnetURI')->text(),
                 $seeds,

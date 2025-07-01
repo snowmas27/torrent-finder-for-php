@@ -13,7 +13,7 @@ class ProviderResult
 
     public static function fromArray(array $data): self
     {
-        Assertion::keyExists($data, 'provider', 'Provider key is missing');
+        Assertion::keyExists($data, 'provider',  'Provider key is missing');
         Assertion::keyExists($data, 'size', 'Size key is missing');
         Assertion::keyExists($data, 'data', 'Data key is missing');
         $size = Size::fromHumanSize($data['size']);

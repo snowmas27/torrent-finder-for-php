@@ -37,6 +37,12 @@ class ManualSearchCommand extends Command
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Search only in the listed provider'
             )
+            ->addOption(
+                'jackett',
+                'j',
+                InputOption::VALUE_REQUIRED,
+                'Search on Jackett indexer'
+            )
             ->addOption('forceRefresh', 'f', InputOption::VALUE_NONE)
         ;
     }

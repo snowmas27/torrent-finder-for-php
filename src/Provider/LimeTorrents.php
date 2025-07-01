@@ -58,7 +58,7 @@ class LimeTorrents implements Provider
             if (!$href) {
                 continue;
             }
-            $metaData = new TorrentData($title, $href, $currentSeeds, Resolution::guessFromString($title));
+            $metaData = TorrentData::fromMagnetURI($title, $href, $currentSeeds, Resolution::guessFromString($title));
             $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
         }
         return $results->getResults();
