@@ -81,6 +81,11 @@ class TorrentData
         return $this->torrentUrl;
     }
 
+    public function getUri(): ?string
+    {
+        return $this->magnetURI ?? $this->torrentUrl;
+    }
+
     public function hasUrl(): bool
     {
         return !empty($this->torrentUrl);
