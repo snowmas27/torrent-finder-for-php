@@ -44,7 +44,7 @@ class Torrent4You implements Provider
             }
 
             $results->add(new ProviderResult(
-                $this->providerInformation->getName(),
+                ProviderType::provider($this->providerInformation->getName()),
                 TorrentData::fromMagnetURI(
                     $title,
                     sprintf('magnet:?xt=urn:btih:%s&dn=%s', $hash, $title),

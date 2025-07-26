@@ -49,7 +49,7 @@ class ThePirateBay implements Provider
             }
 
             $results->add(new ProviderResult(
-                $this->providerInformation->getName(),
+                ProviderType::provider($this->providerInformation->getName()),
                 TorrentData::fromMagnetURI(
                     $title,
                     $magnet,

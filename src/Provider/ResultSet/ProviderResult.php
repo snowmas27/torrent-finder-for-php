@@ -3,13 +3,14 @@
 namespace TorrentFinder\Provider\ResultSet;
 
 use Assert\Assertion;
+use TorrentFinder\Provider\ProviderType;
 use TorrentFinder\VideoSettings\Size;
 
 class ProviderResult
 {
     private TorrentData $torrentMetaData;
     private Size $size;
-    private string $provider;
+    private ProviderType $providerType;
 
     public static function fromArray(array $data): self
     {
@@ -19,14 +20,14 @@ class ProviderResult
         $size = Size::fromHumanSize($data['size']);
         $torrentMetaData = TorrentData::fromArray($data['data']);
 
-        return new self($data['provider'], $torrentMetaData, $size);
+        return new self(ProviderType::fromArray($data['providertype']), $torrentMetaData, $size);
     }
 
-    public function __construct(string $provider, TorrentData $torrentMetaData, Size $size)
+    public function __construct(ProviderType $providerType, TorrentData $torrentMetaData, Size $size)
     {
         $this->torrentMetaData = $torrentMetaData;
         $this->size = $size;
-        $this->provider = $provider;
+        $this->providerType = $providerType;
     }
 
     public function getTorrentMetaData(): TorrentData
@@ -41,7 +42,12 @@ class ProviderResult
 
     public function getProvider(): string
     {
-        return $this->provider;
+        return $this->providerType->getName();
+    }
+
+    public function getProviderType(): string
+    {
+        return $this->providerType->getType();
     }
 
     public function hasResult(): bool
@@ -61,7 +67,10 @@ class ProviderResult
     public function toArray(): array
     {
         return [
-            'provider' => $this->provider,
+            'providerType' => [
+                'name' => $this->providerType->getName(),
+                'type' => $this->providerType->getType(),
+            ],
             'size' => $this->size->getHumanSize(),
             'data' => $this->torrentMetaData->toArray(),
         ];

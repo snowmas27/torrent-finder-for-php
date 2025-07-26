@@ -37,7 +37,11 @@ class TorrentGalaxy implements Provider
                 (int) $cell->eq(10)->filter('span > font')->text(),
                 Resolution::guessFromString($title)
             );
-            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, Size::fromHumanSize($cell->eq(7)->text())));
+            $results->add(new ProviderResult(
+                ProviderType::provider($this->providerInformation->getName()),
+                $metaData,
+                Size::fromHumanSize($cell->eq(7)->text())
+            ));
         }
 
         return $results->getResults();

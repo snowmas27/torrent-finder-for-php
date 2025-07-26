@@ -45,7 +45,7 @@ class Yify implements Provider
                     continue;
                 }
                 $results->add(new ProviderResult(
-                    $this->getName(),
+                    ProviderType::provider($this->getName()),
                     TorrentData::fromMagnetURI($fullTitleResolution, $magnet, 100, $resolution),
                     $size
                 ));

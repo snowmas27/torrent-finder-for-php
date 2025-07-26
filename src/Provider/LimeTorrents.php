@@ -9,6 +9,7 @@ use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\CrawlerInformationExtractor;
 use TorrentFinder\Search\SearchQueryBuilder;
 use TorrentFinder\VideoSettings\Size;
+use TorrentFinder\VideoSettings\SizeFactory;
 use TorrentFinder\VideoSettings\Resolution;
 
 class LimeTorrents implements Provider
@@ -27,39 +28,64 @@ class LimeTorrents implements Provider
         $results = new ProviderResults();
         $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->rawUrlEncode());
         $crawler = $this->initDomCrawler($url);
-        foreach ($crawler->filter('channel > item') as $item) {
-            $crawlerResultList = new Crawler($item);
-            $title = $this->findText($crawlerResultList->filter('title'));
-            preg_match(
-                '/Seeds: (\d+)/i',
-                $this->findText($crawlerResultList->filter('description')),
-                $match
-            );
-            $currentSeeds = $match[1] ?? 0;
-            $size = new Size((int) $this->findText($crawlerResultList->filter('size')));
-            $link = $this->findText($crawlerResultList->filter('comments'));
 
-            if (!$link) {
+        // Parse la table contenant les résultats
+        foreach ($crawler->filter('table.table2 tr') as $row) {
+            $rowCrawler = new Crawler($row);
+
+            // Ignore les en-têtes de table
+            if ($rowCrawler->filter('th')->count() > 0) {
                 continue;
             }
 
-            $linkCrawler = $this->initDomCrawler($link);
-
-            $href = null;
-            foreach ($linkCrawler->filter('div.dltorrent') as $item) {
-                $itemCrawler = new Crawler($item);
-                $href = $this->findAttribute($itemCrawler->filter('a'), 'href');
-
-                if (false !== strpos($href, 'magnet:', 0)) {
-                    break;
-                }
-            }
-
-            if (!$href) {
+            $cells = $rowCrawler->filter('td');
+            if ($cells->count() < 6) {
                 continue;
             }
-            $metaData = TorrentData::fromMagnetURI($title, $href, $currentSeeds, Resolution::guessFromString($title));
-            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
+
+            // Nom du torrent et lien vers la page de détail
+            $titleCell = $cells->eq(0);
+            $titleLink = $titleCell->filter('.tt-name a[href*="-torrent-"]');
+            if ($titleLink->count() === 0) {
+                continue;
+            }
+
+            $title = $this->findText($titleLink);
+            $detailPageUrl = $this->findAttribute($titleLink, 'href');
+
+            // Ajout du domaine de base si le lien est relatif
+            if (strpos($detailPageUrl, 'http') !== 0) {
+                $detailPageUrl = 'https://www.limetorrents.to' . $detailPageUrl;
+            }
+
+            // Taille (3ème colonne)
+            $sizeText = $this->findText($cells->eq(2));
+            $size = SizeFactory::fromHumanSize($sizeText);
+
+            // Seeds (4ème colonne)
+            $currentSeeds = (int) $this->findText($cells->eq(3));
+
+            // Leechers (5ème colonne) 
+            $currentLeechers = (int) $this->findText($cells->eq(4));
+
+            // Récupération du lien de téléchargement direct du torrent
+            $downloadLink = $titleCell->filter('a.csprite_dl14');
+            if ($downloadLink->count() === 0) {
+                continue;
+            }
+
+            $torrentUrl = $this->findAttribute($downloadLink, 'href');
+
+            if (!$torrentUrl || !$title) {
+                continue;
+            }
+
+            $metaData = TorrentData::fromTorrentUrl($title, $torrentUrl, $currentSeeds, Resolution::guessFromString($title));
+            $results->add(new ProviderResult(
+                ProviderType::provider($this->providerInformation->getName()),
+                $metaData,
+                $size
+            ));
         }
         return $results->getResults();
     }

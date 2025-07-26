@@ -3,11 +3,11 @@
 namespace TorrentFinder\Provider\Jackett;
 
 use Symfony\Component\DomCrawler\Crawler;
+use TorrentFinder\Provider\ProviderType;
 use TorrentFinder\Provider\ResultSet\ProviderResult;
 use TorrentFinder\Provider\ResultSet\ProviderResults;
 use TorrentFinder\Provider\ResultSet\TorrentData;
 use TorrentFinder\Search\CrawlerInformationExtractor;
-use TorrentFinder\Search\SearchQueryBuilder;
 use TorrentFinder\VideoSettings\Resolution;
 use TorrentFinder\VideoSettings\Size;
 
@@ -38,7 +38,11 @@ class JackettGenericSearch
 
                 if ($magnet !== null) {
                     $metaData = TorrentData::fromMagnetURI($title, $magnet, $seeders, Resolution::guessFromString($title));
-                    $results->add(new ProviderResult($indexer, $metaData, $size));
+                    $results->add(new ProviderResult(
+                        ProviderType::jackett($indexer),
+                        $metaData,
+                        $size
+                    ));
                     continue;
                 }
 
@@ -47,7 +51,11 @@ class JackettGenericSearch
                     continue;
                 }
                 $metaData = TorrentData::fromTorrentUrl($title, $torrentUrl, $seeders, Resolution::guessFromString($title));
-                $results->add(new ProviderResult($indexer, $metaData, $size));
+                $results->add(new ProviderResult(
+                    ProviderType::jackett($indexer),
+                    $metaData,
+                    $size
+                ));
             } catch (\Exception $e) {
                 printf('%s: %s', $indexer, $e->getMessage());
             }

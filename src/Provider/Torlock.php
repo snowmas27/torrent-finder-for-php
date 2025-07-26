@@ -60,7 +60,11 @@ class Torlock implements Provider
 
             $metaData = TorrentData::fromMagnetURI($title, $magnet, $seeds, Resolution::guessFromString($title));
 
-            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
+            $results->add(new ProviderResult(
+                ProviderType::provider($this->providerInformation->getName()),
+                $metaData,
+                $size
+            ));
         }
 
         return $results->getResults();

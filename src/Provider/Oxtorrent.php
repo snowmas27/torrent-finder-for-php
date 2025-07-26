@@ -46,7 +46,7 @@ class Oxtorrent implements Provider
             }
             $results->add(
                 new ProviderResult(
-                    $this->getName(),
+                    ProviderType::provider($this->getName()),
                     TorrentData::fromMagnetURI($title, $magnet, $seeds, Resolution::guessFromString($title)),
                     $size
                 )

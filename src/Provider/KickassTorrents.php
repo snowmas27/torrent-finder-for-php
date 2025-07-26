@@ -53,7 +53,7 @@ class KickassTorrents implements Provider
             );
 
             $results->add(new ProviderResult(
-                $this->providerInformation->getName(),
+                ProviderType::provider($this->providerInformation->getName()),
                 $metaData,
                 Size::fromHumanSize($humanSize)
             ));

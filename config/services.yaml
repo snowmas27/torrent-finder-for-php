@@ -4,102 +4,102 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    providers:
-        1333X:
-            name: '1333X'
-            searchUrl: 'https://1337x.to/sort-search/%s/seeders/desc/1/'
-            class: TorrentFinder\Provider\Provider1337x
-        animetosho:
-            name: 'animetosho'
-            searchUrl: 'https://feed.animetosho.org/rss2?q=%s'
-            class: TorrentFinder\Provider\Animetosho
-        btdb:
-            name: 'btdb'
-            searchUrl: 'https://btdb.eu/search/%s/?sort=popular'
-            class: TorrentFinder\Provider\Btdb
-        extratorrent:
-            name: 'extratorrent'
-            searchUrl: 'https://xtra.unblocked.lol/search/?search=%s&new=1&x=0&y=0'
-            class: TorrentFinder\Provider\Extratorrent
-        gktorrents:
-            name: 'gktorrents'
-            searchUrl: 'https://www.gktorrents.com/recherche/%s'
-            class: TorrentFinder\Provider\GkTorrents
-        kickasstorrents:
-            name: 'kickasstorrents'
-            searchUrl: 'https://katcr.to/usearch/%s/'
-            class: TorrentFinder\Provider\KickassTorrents
-        magnet4you:
-            name: 'magnet4you'
-            searchUrl: 'https://magnet4you.me/search.php?s=%s&sort=seed'
-            class: TorrentFinder\Provider\Magnet4You
-        nyaa:
-            name: 'nyaa'
-            searchUrl: 'https://nyaa.si/?f=0&c=1_0&q=%s&s=seeders&o=desc'
-            class: TorrentFinder\Provider\Nyaa
-        oxtorrent:
-            name: 'oxtorrent'
-            searchUrl: 'https://www.oxtorrent.si/recherche/%s'
-            class: TorrentFinder\Provider\Oxtorrent
-        limetorrents:
-            name: 'limetorrents'
-            searchUrl: 'https://limetorrents.info/searchrss/%s/'
-            class: TorrentFinder\Provider\LimeTorrents
-        thepiratebay:
-            name: 'thepiratebay'
-            searchUrl: 'https://thepiratebay.org/search.php?q=%s'
-            class: TorrentFinder\Provider\ThePirateBay
-        torlock:
-            name: 'torlock'
-            searchUrl: 'https://www.torlock.com/all/torrents/%s.html?sort=seeds'
-            class: TorrentFinder\Provider\Torlock
-        torrent4you:
-            name: 'torrent4you'
-            searchUrl: 'http://torrent4you.me/search.php?s=%s&sort=seed'
-            class: TorrentFinder\Provider\Torrent4You
-        torrent9:
-            name: 'torrent9'
-            searchUrl: 'https://torrent9.re/recherche/%s'
-            class: TorrentFinder\Provider\Torrent9
-        torrentgalaxy:
-            name: 'torrentgalaxy'
-            searchUrl: 'https://torrentgalaxy.to/torrents.php?search=%s&sort=seeders&order=desc'
-            class: TorrentFinder\Provider\TorrentGalaxy
-        yify:
-            name: 'yify'
-            searchUrl: 'https://yts.mx/browse-movies/%s/all/all/0/latest/0/all'
-            class: TorrentFinder\Provider\Yify
-        zooqle:
-            name: 'zooqle'
-            searchUrl: 'https://zooqle.com/search?q=%s&fmt=rss'
-            class: TorrentFinder\Provider\Zooqle
-        yggtorrent:
-            name: 'yggtorrent'
-            searchUrl: 'https://www2.yggtorrent.co/search_torrent/%s.html'
-            class: TorrentFinder\Provider\YggTorrent
+  providers:
+    1333X:
+      name: "1333X"
+      searchUrl: "https://1337x.to/sort-search/%s/seeders/desc/1/"
+      class: TorrentFinder\Provider\Provider1337x
+    animetosho:
+      name: "animetosho"
+      searchUrl: "https://feed.animetosho.org/rss2?q=%s"
+      class: TorrentFinder\Provider\Animetosho
+    btdb:
+      name: "btdb"
+      searchUrl: "https://btdb.eu/search/%s/?sort=popular"
+      class: TorrentFinder\Provider\Btdb
+    extratorrent:
+      name: "extratorrent"
+      searchUrl: "https://xtra.unblocked.lol/search/?search=%s&new=1&x=0&y=0"
+      class: TorrentFinder\Provider\Extratorrent
+    gktorrents:
+      name: "gktorrents"
+      searchUrl: "https://www.gktorrents.com/recherche/%s"
+      class: TorrentFinder\Provider\GkTorrents
+    kickasstorrents:
+      name: "kickasstorrents"
+      searchUrl: "https://katcr.to/usearch/%s/"
+      class: TorrentFinder\Provider\KickassTorrents
+    magnet4you:
+      name: "magnet4you"
+      searchUrl: "https://magnet4you.me/search.php?s=%s&sort=seed"
+      class: TorrentFinder\Provider\Magnet4You
+    nyaa:
+      name: "nyaa"
+      searchUrl: "https://nyaa.si/?f=0&c=1_0&q=%s&s=seeders&o=desc"
+      class: TorrentFinder\Provider\Nyaa
+    oxtorrent:
+      name: "oxtorrent"
+      searchUrl: "https://www.oxtorrent.si/recherche/%s"
+      class: TorrentFinder\Provider\Oxtorrent
+    limetorrents:
+      name: "limetorrents"
+      searchUrl: "https://www.limetorrents.to/search/all/%s/"
+      class: TorrentFinder\Provider\LimeTorrents
+    thepiratebay:
+      name: "thepiratebay"
+      searchUrl: "https://thepiratebay.org/search.php?q=%s"
+      class: TorrentFinder\Provider\ThePirateBay
+    torlock:
+      name: "torlock"
+      searchUrl: "https://www.torlock.com/all/torrents/%s.html?sort=seeds"
+      class: TorrentFinder\Provider\Torlock
+    torrent4you:
+      name: "torrent4you"
+      searchUrl: "http://torrent4you.me/search.php?s=%s&sort=seed"
+      class: TorrentFinder\Provider\Torrent4You
+    torrent9:
+      name: "torrent9"
+      searchUrl: "https://torrent9.re/recherche/%s"
+      class: TorrentFinder\Provider\Torrent9
+    torrentgalaxy:
+      name: "torrentgalaxy"
+      searchUrl: "https://torrentgalaxy.to/torrents.php?search=%s&sort=seeders&order=desc"
+      class: TorrentFinder\Provider\TorrentGalaxy
+    yify:
+      name: "yify"
+      searchUrl: "https://yts.mx/browse-movies/%s/all/all/0/latest/0/all"
+      class: TorrentFinder\Provider\Yify
+    zooqle:
+      name: "zooqle"
+      searchUrl: "https://zooqle.com/search?q=%s&fmt=rss"
+      class: TorrentFinder\Provider\Zooqle
+    yggtorrent:
+      name: "yggtorrent"
+      searchUrl: "https://www2.yggtorrent.co/search_torrent/%s.html"
+      class: TorrentFinder\Provider\YggTorrent
 
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    TorrentFinder\:
-        resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  TorrentFinder\:
+    resource: "../src/*"
+    exclude: "../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}"
 
-    TorrentFinder\Provider\ProvidersConfiguration:
-        arguments:
-            $providers: '%providers%'
+  TorrentFinder\Provider\ProvidersConfiguration:
+    arguments:
+      $providers: "%providers%"
 
-    TorrentFinder\Search\SearchOnProviders:
-        arguments:
-            $providersConfigurations: '@TorrentFinder\Provider\ProvidersConfiguration'
+  TorrentFinder\Search\SearchOnProviders:
+    arguments:
+      $providersConfigurations: '@TorrentFinder\Provider\ProvidersConfiguration'
 
-    TorrentFinder\Provider\Jackett\JackettUrlBuilder:
-        arguments:
-            $host: '%env(resolve:JACKETT_HOST)%'
-            $port: '%env(resolve:JACKETT_PORT)%'
-            $apikey: '%env(resolve:JACKETT_APIKEY)%'
+  TorrentFinder\Provider\Jackett\JackettUrlBuilder:
+    arguments:
+      $host: "%env(resolve:JACKETT_HOST)%"
+      $port: "%env(resolve:JACKETT_PORT)%"
+      $apikey: "%env(resolve:JACKETT_APIKEY)%"

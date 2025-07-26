@@ -52,7 +52,7 @@ class Torrent9 implements Provider
 
             $sizeValue = $itemCrawler->filter('td')->eq(1)->text();
             $results->add(new ProviderResult(
-                $this->providerInformation->getName(),
+                ProviderType::provider($this->providerInformation->getName()),
                 $metaData = TorrentData::fromMagnetURI(
                     $title = trim($itemCrawler->filter('td')->eq(0)->text()),
                     $magnet,

@@ -48,7 +48,11 @@ class YggTorrent implements Provider
                     $seeds,
                     Resolution::guessFromString($title)
                 );
-                $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
+                $results->add(new ProviderResult(
+                    ProviderType::provider($this->providerInformation->getName()),
+                    $metaData,
+                    $size
+                ));
             } catch (\Exception $exception) {
                 continue;
             }

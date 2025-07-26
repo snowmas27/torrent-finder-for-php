@@ -40,7 +40,11 @@ class Nyaa implements Provider
                 $td->eq(5)->text(),
                 Resolution::guessFromString($title)
             );
-            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, $size));
+            $results->add(new ProviderResult(
+                ProviderType::provider($this->providerInformation->getName()),
+                $metaData,
+                $size
+            ));
         }
         return $results->getResults();
     }

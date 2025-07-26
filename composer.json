@@ -13,12 +13,14 @@
     "ext-iconv": "*",
     "beberlei/assert": "^3.3.1",
     "doctrine/collections": "^1.6",
+    "guzzlehttp/guzzle": "^7.9",
     "symfony/console": "^4.2 || ^5.0",
     "symfony/css-selector": "4.4.*",
     "symfony/dom-crawler": "4.4.*",
     "symfony/dotenv": "4.4.*",
     "symfony/flex": "~1.2",
     "symfony/framework-bundle": "4.4.*",
+    "symfony/process": "4.4.*",
     "symfony/yaml": "4.4.*"
   },
   "require-dev": {

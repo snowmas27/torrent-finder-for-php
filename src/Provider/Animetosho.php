@@ -46,7 +46,11 @@ class Animetosho implements Provider
                 10,
                 Resolution::guessFromString($itemCrawler->filter('title')->text())
             );
-            $results->add(new ProviderResult($this->providerInformation->getName(), $metaData, Size::fromHumanSize($match[1])));
+            $results->add(new ProviderResult(
+                ProviderType::provider($this->providerInformation->getName()),
+                $metaData,
+                Size::fromHumanSize($match[1])
+            ));
         }
 
         return $results->getResults();

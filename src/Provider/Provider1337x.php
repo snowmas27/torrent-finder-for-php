@@ -51,7 +51,7 @@ class Provider1337x implements Provider
             );
 
             $results->add(new ProviderResult(
-                $this->providerInformation->getName(),
+                ProviderType::provider($this->providerInformation->getName()),
                 $metaData,
                 Size::fromHumanSize($td->eq(4)->text())
             ));
