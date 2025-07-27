@@ -14,13 +14,13 @@ class ProviderResult
 
     public static function fromArray(array $data): self
     {
-        Assertion::keyExists($data, 'provider',  'Provider key is missing');
+        Assertion::keyExists($data, 'providerType',  'providerType key is missing');
         Assertion::keyExists($data, 'size', 'Size key is missing');
         Assertion::keyExists($data, 'data', 'Data key is missing');
         $size = Size::fromHumanSize($data['size']);
         $torrentMetaData = TorrentData::fromArray($data['data']);
 
-        return new self(ProviderType::fromArray($data['providertype']), $torrentMetaData, $size);
+        return new self(ProviderType::fromArray($data['providerType']), $torrentMetaData, $size);
     }
 
     public function __construct(ProviderType $providerType, TorrentData $torrentMetaData, Size $size)
