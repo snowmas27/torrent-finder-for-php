@@ -75,7 +75,7 @@ parameters:
       class: TorrentFinder\Provider\Zooqle
     yggtorrent:
       name: "yggtorrent"
-      searchUrl: "https://www2.yggtorrent.co/search_torrent/%s.html"
+      searchUrl: "https://www.yggtorrent.diy/recherche/%s"
       class: TorrentFinder\Provider\YggTorrent
 
 services:

@@ -25,26 +25,31 @@ class YggTorrent implements Provider
     public function search(SearchQueryBuilder $keywords): array
     {
         $results = new ProviderResults();
-        $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->urlize());
+        $url = sprintf($this->providerInformation->getSearchUrl()->getUrl(), $keywords->rawUrlEncode());
         /** @var Crawler $crawler */
         $crawler = $this->initDomCrawler($url);
         foreach ($crawler->filter('table.cust-table tr') as $item) {
             try {
                 $domCrawler = new Crawler($item);
                 $td = $domCrawler->filter('td');
-                $crawlerDetailPage = $this->initDomCrawler(
-                    sprintf(
-                        '%s%s',
-                        $this->providerInformation->getSearchUrl()->getBaseUrl(),
-                        $this->findAttribute($td->eq(0)->filter('a'), 'href')
-                    )
+                if ($td->count() < 7) {
+                    continue;
+                }
+                $title = $this->findText($td->eq(1)->filter('a'));
+                $detailUrl = sprintf(
+                    '%s%s',
+                    $this->providerInformation->getSearchUrl()->getBaseUrl(),
+                    $this->findAttribute($td->eq(1)->filter('a'), 'href')
                 );
-                $title = $this->findText($td->eq(0));
-                $size = Size::fromHumanSize($this->findText($td->eq(1)));
-                $seeds = $this->findText($td->eq(2));
+                $size = Size::fromHumanSize($this->findText($td->eq(4)));
+                $seeds = (int) $this->findText($td->eq(6)->filter('span.seed_ok'));
+                $magnet = $this->findFirstMagnetUrl($detailUrl);
+                if (null === $magnet) {
+                    continue;
+                }
                 $metaData = TorrentData::fromMagnetURI(
                     $title,
-                    $this->extractMagnet($crawlerDetailPage),
+                    $magnet,
                     $seeds,
                     Resolution::guessFromString($title)
                 );
@@ -59,21 +64,6 @@ class YggTorrent implements Provider
         }
 
         return $results->getResults();
-    }
-
-    private function extractMagnet(Crawler $detailPage): ?string
-    {
-        foreach ($detailPage->filter('div.download-btn') as $item) {
-            $crawler = new Crawler($item);
-
-            if (false === strpos($href = $crawler->filter('a')->attr('href'), 'magnet:')) {
-                continue;
-            }
-
-            return $href;
-        }
-
-        throw new \InvalidArgumentException('No magnet was found');
     }
 
     public function getName(): string
