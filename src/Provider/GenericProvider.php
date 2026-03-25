@@ -79,7 +79,6 @@ class GenericProvider implements Provider
             $this->providerInformation->getSearchUrl()->getUrl(),
             $keywords->rawUrlEncode()
         );
-        dump("Searching {$this->getName()} with URL: $url");
         $baseUrl = $this->providerInformation->getSearchUrl()->getBaseUrl();
 
         try {
