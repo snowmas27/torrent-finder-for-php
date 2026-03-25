@@ -43,7 +43,7 @@ parameters:
       class: TorrentFinder\Provider\Oxtorrent
     limetorrents:
       name: "limetorrents"
-      searchUrl: "https://www.limetorrents.to/search/all/%s/"
+      searchUrl: "https://www.limetorrents.fun/search/all/%s/"
       class: TorrentFinder\Provider\LimeTorrents
     thepiratebay:
       name: "thepiratebay"
@@ -77,7 +77,15 @@ parameters:
       name: "yggtorrent"
       searchUrl: "https://www.yggtorrent.diy/recherche/%s"
       class: TorrentFinder\Provider\YggTorrent
-
+    # Generic scraper test entries — same URLs as existing providers
+    torrentdownloads:
+      name: "torrentdownloads"
+      searchUrl: "https://www.torrentdownloads.pro/search/?search=%s"
+      class: TorrentFinder\Provider\GenericProvider
+    generic_yggtorrent:
+      name: "generic_yggtorrent"
+      searchUrl: "https://www.yggtorrent.diy/recherche/%s"
+      class: TorrentFinder\Provider\GenericProvider
 services:
   # default configuration for services in *this* file
   _defaults:
