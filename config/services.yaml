@@ -67,7 +67,7 @@ parameters:
       class: TorrentFinder\Provider\TorrentGalaxy
     yify:
       name: "yify"
-      searchUrl: "https://yts.mx/browse-movies/%s/all/all/0/latest/0/all"
+      searchUrl: "https://yts.mx/browse-movies/%s/all/all/0/latest/0/all" 
       class: TorrentFinder\Provider\Yify
     zooqle:
       name: "zooqle"

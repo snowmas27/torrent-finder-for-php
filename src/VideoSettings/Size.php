@@ -46,12 +46,14 @@ class Size
 
     public function getHumanSize(): string
     {
+        $minLengthKB = 1024 ** 1;
         $minLengthMB = 1024 ** 2;
         $minLengthGB = 1024 ** 3;
 
         $unit = self::UNIT_MB;
         if ($this->bytes < $minLengthMB) {
-            $size = 0;
+            $size = $this->bytes / $minLengthKB;
+            $unit = self::UNIT_KB;
         } elseif ($this->bytes >= $minLengthMB && $this->bytes < $minLengthGB) {
             $size = $this->bytes / $minLengthMB;
         } else {

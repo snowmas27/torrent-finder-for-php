@@ -35,8 +35,12 @@ class GenericProvider implements Provider
 
     private ProviderInformation $providerInformation;
 
-    // Matches human-readable file sizes: "2.87 GB", "695,45 MB", "1.4GiB"
-    private const SIZE_REGEX = '/\b(\d+(?:[.,]\d+)?)\s*(GiB|GIBYTE|GIB|GBS|GB|GO|MiB|MIBYTE|MIB|MBS|MB|MO|KiB|KIB|KB|KO)\b/i';
+    // Matches human-readable file sizes: "2.87 GB", "695,45 MB", "1.4GiB".
+    // The lookbehind (?<![\w.]) avoids capturing a trailing fragment when the number is
+    // glued to preceding digits (e.g. "51714.46 GB" must yield 14.46, not 46), and the
+    // lookahead (?![a-z]) lets the unit be followed by a digit (e.g. "14.46 GB0" from
+    // concatenated table cells) while still rejecting words like "MBit" / "GBytes".
+    private const SIZE_REGEX = '/(?<![\w.])(\d+(?:[.,]\d+)?)\s*(GiB|GIBYTE|GIB|GBS|GB|GO|MiB|MIBYTE|MIB|MBS|MB|MO|KiB|KIB|KB|KO)(?![a-z])/i';
 
     // Link href patterns that indicate navigation / category links (excluded from title candidates)
     private const SKIP_HREF_PATTERNS = [
@@ -525,15 +529,39 @@ class GenericProvider implements Provider
     }
 
     /**
-     * Extracts the first recognisable file size from the row's combined text.
+     * Extracts the first recognisable file size from the row.
+     *
+     * Sizes are parsed per-cell rather than from the whole row's concatenated text:
+     * DomCrawler::text() joins sibling elements without whitespace, so a size cell
+     * ("<span>14.46 GB</span>") gets glued to its neighbours ("51714.46 GB0") and the
+     * unit ends up wedged between digits, defeating the regex. Scanning leaf cells keeps
+     * each size string clean.
      */
     private function extractSize(Crawler $row): ?Size
     {
-        return $this->parseSizeFromText($row->text());
+        $found = null;
+
+        $row->filter('td, span, div, p, a')->each(function (Crawler $cell) use (&$found) {
+            if ($found !== null) {
+                return;
+            }
+            $size = $this->parseSizeFromText(trim($cell->text()));
+            if ($size !== null) {
+                $found = $size;
+            }
+        });
+
+        // Fallback to the whole-row text for layouts without discrete size cells.
+        return $found ?? $this->parseSizeFromText($row->text());
     }
 
     private function parseSizeFromText(string $text): ?Size
     {
+        // Collapse non-breaking spaces (NBSP, narrow NBSP, figure space) to a regular
+        // space — torrent listings routinely glue the number to the unit with "14.46&nbsp;GB",
+        // which the \s in SIZE_REGEX would not match in PCRE's default (non-Unicode) mode.
+        $text = preg_replace('/[\x{00a0}\x{2007}\x{202f}]/u', ' ', $text) ?? $text;
+
         if (!preg_match(self::SIZE_REGEX, $text, $m)) {
             return null;
         }
