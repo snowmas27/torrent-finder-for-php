@@ -5,86 +5,51 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   providers:
-    1333X:
-      name: "1333X"
-      searchUrl: "https://1337x.to/sort-search/%s/seeders/desc/1/"
-      class: TorrentFinder\Provider\Provider1337x
     animetosho:
       name: "animetosho"
       searchUrl: "https://feed.animetosho.org/rss2?q=%s"
       class: TorrentFinder\Provider\Animetosho
-    btdb:
-      name: "btdb"
-      searchUrl: "https://btdb.eu/search/%s/?sort=popular"
-      class: TorrentFinder\Provider\Btdb
-    extratorrent:
-      name: "extratorrent"
-      searchUrl: "https://xtra.unblocked.lol/search/?search=%s&new=1&x=0&y=0"
-      class: TorrentFinder\Provider\Extratorrent
-    gktorrents:
-      name: "gktorrents"
-      searchUrl: "https://www.gktorrents.com/recherche/%s"
-      class: TorrentFinder\Provider\GkTorrents
-    kickasstorrents:
-      name: "kickasstorrents"
-      searchUrl: "https://katcr.to/usearch/%s/"
-      class: TorrentFinder\Provider\KickassTorrents
-    magnet4you:
-      name: "magnet4you"
-      searchUrl: "https://magnet4you.me/search.php?s=%s&sort=seed"
-      class: TorrentFinder\Provider\Magnet4You
     nyaa:
       name: "nyaa"
       searchUrl: "https://nyaa.si/?f=0&c=1_0&q=%s&s=seeders&o=desc"
       class: TorrentFinder\Provider\Nyaa
-    oxtorrent:
-      name: "oxtorrent"
-      searchUrl: "https://www.oxtorrent.si/recherche/%s"
-      class: TorrentFinder\Provider\Oxtorrent
     limetorrents:
       name: "limetorrents"
       searchUrl: "https://www.limetorrents.fun/search/all/%s/"
       class: TorrentFinder\Provider\LimeTorrents
     thepiratebay:
       name: "thepiratebay"
-      searchUrl: "https://thepiratebay.org/search.php?q=%s"
+      # JSON API behind thepiratebay.org; cat=200 = Video
+      searchUrl: "https://apibay.org/q.php?q=%s&cat=200"
       class: TorrentFinder\Provider\ThePirateBay
     torlock:
       name: "torlock"
       searchUrl: "https://www.torlock.com/all/torrents/%s.html?sort=seeds"
-      class: TorrentFinder\Provider\Torlock
-    torrent4you:
-      name: "torrent4you"
-      searchUrl: "http://torrent4you.me/search.php?s=%s&sort=seed"
-      class: TorrentFinder\Provider\Torrent4You
-    torrent9:
-      name: "torrent9"
-      searchUrl: "https://torrent9.re/recherche/%s"
-      class: TorrentFinder\Provider\Torrent9
-    torrentgalaxy:
-      name: "torrentgalaxy"
-      searchUrl: "https://torrentgalaxy.to/torrents.php?search=%s&sort=seeders&order=desc"
-      class: TorrentFinder\Provider\TorrentGalaxy
-    yify:
-      name: "yify"
-      searchUrl: "https://yts.mx/browse-movies/%s/all/all/0/latest/0/all" 
-      class: TorrentFinder\Provider\Yify
-    zooqle:
-      name: "zooqle"
-      searchUrl: "https://zooqle.com/search?q=%s&fmt=rss"
-      class: TorrentFinder\Provider\Zooqle
-    yggtorrent:
-      name: "yggtorrent"
-      searchUrl: "https://www.yggtorrent.diy/recherche/%s"
-      class: TorrentFinder\Provider\YggTorrent
-    # Generic scraper test entries — same URLs as existing providers
+      class: TorrentFinder\Provider\GenericProvider
+    # Sites scraped by the universal GenericProvider
+    rutor:
+      name: "rutor"
+      searchUrl: "http://rutor.info/search/0/0/000/2/%s"
+      class: TorrentFinder\Provider\GenericProvider
+    bitsearch:
+      name: "bitsearch"
+      searchUrl: "https://bitsearch.eu/search?q=%s&sort=seeders"
+      class: TorrentFinder\Provider\GenericProvider
+    therarbg:
+      name: "therarbg"
+      searchUrl: "https://therarbg.com/get-posts/keywords:%s/"
+      class: TorrentFinder\Provider\GenericProvider
+    torrentdownload:
+      name: "torrentdownload"
+      searchUrl: "https://www.torrentdownload.info/feed?q=%s"
+      class: TorrentFinder\Provider\GenericProvider
     torrentdownloads:
       name: "torrentdownloads"
-      searchUrl: "https://www.torrentdownloads.pro/search/?search=%s"
+      searchUrl: "https://www.torrentdownloads.pro/rss.xml?type=search&search=%s"
       class: TorrentFinder\Provider\GenericProvider
-    generic_yggtorrent:
-      name: "generic_yggtorrent"
-      searchUrl: "https://www.yggtorrent.diy/recherche/%s"
+    bt4g:
+      name: "bt4g"
+      searchUrl: "https://bt4gprx.com/search?q=%s&page=rss"
       class: TorrentFinder\Provider\GenericProvider
 services:
   # default configuration for services in *this* file

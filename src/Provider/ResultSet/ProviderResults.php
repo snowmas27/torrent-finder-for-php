@@ -16,8 +16,9 @@ class ProviderResults implements \IteratorAggregate
 
     public function add(ProviderResult $providerResult): void
     {
-        $exists = $this->results->exists(function (int $key, ProviderResult $item) use ($providerResult) {
-            return $providerResult->getTorrentMetaData()->getMagnetURI() === $item->getTorrentMetaData()->getMagnetURI();
+        $key = self::deduplicationKey($providerResult->getTorrentMetaData());
+        $exists = $this->results->exists(function (int $index, ProviderResult $item) use ($key) {
+            return $key === self::deduplicationKey($item->getTorrentMetaData());
         });
 
         if ($exists) {
@@ -25,6 +26,25 @@ class ProviderResults implements \IteratorAggregate
         }
 
         $this->results->add($providerResult);
+    }
+
+    /**
+     * The same torrent is exposed with different trackers / display names depending on the
+     * site, so magnets are compared on their info hash. Torrents without a magnet are
+     * compared on their .torrent URL.
+     */
+    private static function deduplicationKey(TorrentData $torrentData): string
+    {
+        $magnet = $torrentData->getMagnetURI();
+        if (null === $magnet) {
+            return 'url:' . $torrentData->getTorrentUrl();
+        }
+
+        if (preg_match('/urn:btih:([a-z0-9]+)/i', $magnet, $match)) {
+            return 'btih:' . strtolower($match[1]);
+        }
+
+        return 'magnet:' . $magnet;
     }
 
     public function getResults(): array
