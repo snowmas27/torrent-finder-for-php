@@ -8,6 +8,7 @@ use TorrentFinder\Provider\Jackett\JackettSearchOnIndexerList;
 use TorrentFinder\Provider\ProviderConfiguration;
 use TorrentFinder\Provider\ProviderFactory;
 use TorrentFinder\Provider\ProvidersConfiguration;
+use TorrentFinder\Provider\ResultSet\ProviderResults;
 use TorrentFinder\Provider\ResultSet\SearchResults;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -36,9 +37,16 @@ class SearchOnProviders
         $results = new SearchResults([]);
         $results = $this->searchOnProviders($queryBuilders, $options);
         $jackettResults = $this->searchOnJackett($queryBuilders, $options);
-        $results = array_merge($results->getResults(), $jackettResults->getResults());
+        $results = new SearchResults(array_merge($results->getResults(), $jackettResults->getResults()));
 
-        return new SearchResults($results);
+        // The same torrent is often listed by several sources: results are sorted by seeds,
+        // so the copy with the most seeds is the one kept.
+        $deduplicatedResults = new ProviderResults();
+        foreach ($results->getResults() as $result) {
+            $deduplicatedResults->add($result);
+        }
+
+        return new SearchResults($deduplicatedResults->getResults());
     }
 
     public function searchOnProviders(

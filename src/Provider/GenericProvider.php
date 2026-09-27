@@ -35,6 +35,9 @@ class GenericProvider implements Provider
 
     private ProviderInformation $providerInformation;
 
+    // Index of the seeders <td> in result rows, when the listing table has a recognisable header
+    private ?int $seedColumnIndex = null;
+
     // Matches human-readable file sizes: "2.87 GB", "695,45 MB", "1.4GiB".
     // The lookbehind (?<![\w.]) avoids capturing a trailing fragment when the number is
     // glued to preceding digits (e.g. "51714.46 GB" must yield 14.46, not 46), and the
@@ -64,6 +67,12 @@ class GenericProvider implements Provider
     // Patterns strongly associated with torrent release names
     private const TORRENT_NAME_REGEX = '/\b(\d{4}|\d{3,4}p|mkv|avi|mp4|xvid|x26[45]|hevc|bluray|webrip|web|hdtv|dvdrip|bdrip|hdcam|french|multi|vostfr|english|dual|vff|truefrench|extreme|yify|rarbg)\b/i';
 
+    // Root element of an RSS or Atom document
+    private const FEED_ROOT_REGEX = '/^\s*(<\?xml[^>]*>\s*)?(<!--.*?-->\s*)*<(rss|feed|rdf:RDF)[\s>]/is';
+
+    // Table header text identifying the seeders column ("Seeds", "Seeders", "S", "SE", "↑")
+    private const SEED_HEADER_REGEX = '/^(seed(s|ers?)?|se|s|↑|▲)$/iu';
+
     // CSS class / attribute keywords associated with seeder columns
     private const SEED_KEYWORDS = ['seed', 'seeder', 'se', 'up'];
 
@@ -84,18 +93,21 @@ class GenericProvider implements Provider
             $keywords->rawUrlEncode()
         );
         $baseUrl = $this->providerInformation->getSearchUrl()->getBaseUrl();
+        $this->seedColumnIndex = null;
 
         try {
-            $crawler = $this->initDomCrawler($url);
+            $content = $this->fileGetContentsCurl($url);
         } catch (\Exception $e) {
             return [];
         }
 
-        // RSS / Atom feeds: <item> or <entry> with <title> child
-        if ($crawler->filter('item > title, entry > title')->count() > 0) {
-            return $this->parseRss($crawler);
+        // RSS / Atom feeds must be parsed as XML: the HTML parser behind Crawler treats
+        // <link> as a void element and drops namespaced tags such as <nyaa:infoHash>.
+        if (preg_match(self::FEED_ROOT_REGEX, $content)) {
+            return $this->parseFeed($content, $baseUrl);
         }
 
+        $crawler = new Crawler($content);
         $rows = $this->detectResultRows($crawler);
 
         foreach ($rows as $rowNode) {
@@ -117,85 +129,174 @@ class GenericProvider implements Provider
     // RSS / Atom parsing
     // =========================================================================
 
-    private function parseRss(Crawler $crawler): array
+    private function parseFeed(string $xml, string $baseUrl): array
     {
+        $document = new \DOMDocument();
+        $document->recover = true;
+        $previousErrorMode = libxml_use_internal_errors(true);
+        $loaded = $document->loadXML($xml, LIBXML_NOCDATA | LIBXML_NONET);
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousErrorMode);
+
+        if (!$loaded) {
+            return [];
+        }
+
         $results = new ProviderResults();
 
-        foreach ($crawler->filter('item, entry') as $itemNode) {
-            try {
-                $item = new Crawler($itemNode);
-
-                $title = trim($item->filter('title')->text());
-                if ($title === '') {
+        foreach (['item', 'entry'] as $tagName) {
+            foreach ($document->getElementsByTagNameNS('*', $tagName) as $itemNode) {
+                try {
+                    $result = $this->processFeedItem($itemNode, $baseUrl);
+                    if ($result !== null) {
+                        $results->add($result);
+                    }
+                } catch (\Exception $e) {
                     continue;
                 }
-
-                $magnet = null;
-                $torrentUrl = null;
-
-                // <enclosure> tag (used by most RSS torrent feeds)
-                if ($item->filter('enclosure')->count() > 0) {
-                    $encUrl = $item->filter('enclosure')->attr('url') ?? '';
-                    if (str_starts_with($encUrl, 'magnet:')) {
-                        $magnet = $encUrl;
-                    } elseif ($encUrl !== '') {
-                        $torrentUrl = $encUrl;
-                    }
-                }
-
-                // <link> element (used by some feeds for direct magnet URIs)
-                if ($magnet === null && $torrentUrl === null && $item->filter('link')->count() > 0) {
-                    $link = trim($item->filter('link')->text());
-                    if (str_starts_with($link, 'magnet:')) {
-                        $magnet = $link;
-                    } elseif ($link !== '') {
-                        $torrentUrl = $link;
-                    }
-                }
-
-                // Explicit <magnetURI> or <magneturi> tag (some custom feeds)
-                if ($magnet === null) {
-                    $magnetTag = $item->filter('magnetURI, magnetUri, magneturi');
-                    if ($magnetTag->count() > 0) {
-                        $magnet = trim($magnetTag->text());
-                    }
-                }
-
-                if ($magnet === null && $torrentUrl === null) {
-                    continue;
-                }
-
-                // Size from <description> CDATA
-                $size = new Size(0);
-                if ($item->filter('description')->count() > 0) {
-                    try {
-                        $desc = $item->filter('description')->html();
-                        $size = $this->parseSizeFromText(strip_tags($desc)) ?? new Size(0);
-                    } catch (\Exception $e) {
-                    }
-                }
-
-                $seeds = 0;
-                if ($item->filter('seeders, seeds')->count() > 0) {
-                    $seeds = (int) $item->filter('seeders, seeds')->text();
-                }
-
-                $resolution = Resolution::guessFromString($title);
-                $torrentData = $magnet !== null
-                    ? TorrentData::fromMagnetURI($title, $magnet, $seeds, $resolution)
-                    : TorrentData::fromTorrentUrl($title, $torrentUrl, $seeds, $resolution);
-
-                $results->add(new ProviderResult(
-                    ProviderType::provider($this->providerInformation->getName()),
-                    $torrentData,
-                    $size
-                ));
-            } catch (\Exception $e) {
-                continue;
             }
         }
 
         return $results->getResults();
+    }
+
+    /**
+     * Feeds put the download information in many different places depending on the site:
+     *   - magnet in <link>, <enclosure url>, <magnetURI>, a torznab attr or the description HTML
+     *   - bare info hash in <nyaa:infoHash>, <info_hash>, a torznab attr, the link or the description
+     *   - .torrent URL in <enclosure url> or <link>
+     * A magnet (given or rebuilt from the info hash) is preferred so results can be deduplicated.
+     */
+    private function processFeedItem(\DOMElement $itemNode, string $baseUrl): ?ProviderResult
+    {
+        $fields = [];
+        $attributes = [];
+        $links = [];
+
+        foreach ($itemNode->childNodes as $child) {
+            if (!$child instanceof \DOMElement) {
+                continue;
+            }
+            $name = strtolower($child->localName);
+            $value = trim($child->textContent);
+
+            if ($name === 'attr' && $child->hasAttribute('name')) {
+                // <torznab:attr name="seeders" value="12"/>
+                $attributes[strtolower($child->getAttribute('name'))] = $child->getAttribute('value');
+                continue;
+            }
+            if ($name === 'enclosure' || $name === 'link') {
+                // Atom <link href="…"/> and RSS <enclosure url="…"/> carry the URL in an attribute
+                $links[] = $child->getAttribute('url') ?: $child->getAttribute('href') ?: $value;
+            }
+            if (!isset($fields[$name])) {
+                $fields[$name] = $value;
+            }
+        }
+
+        $title = $fields['title'] ?? '';
+        if ($title === '') {
+            return null;
+        }
+
+        $description = html_entity_decode(
+            $fields['description'] ?? $fields['summary'] ?? $fields['content'] ?? '',
+            ENT_QUOTES | ENT_HTML5
+        );
+        $links = array_filter(array_merge(
+            $links,
+            [$fields['magneturi'] ?? '', $attributes['magneturl'] ?? '', $fields['guid'] ?? '']
+        ));
+
+        $download = $this->extractFeedDownload($title, $links, $fields, $attributes, $description, $baseUrl);
+        if ($download === null) {
+            return null;
+        }
+
+        $resolution = Resolution::guessFromString($title);
+        $seeds = (int) ($fields['seeders'] ?? $fields['seeds'] ?? $attributes['seeders'] ?? 0);
+        if ($seeds === 0 && preg_match('/Seed(?:s|ers)?\s*:?\s*(\d+)/i', $this->htmlToText($description), $m)) {
+            $seeds = (int) $m[1];
+        }
+
+        $torrentData = $download['type'] === 'magnet'
+            ? TorrentData::fromMagnetURI($title, $download['url'], $seeds, $resolution)
+            : TorrentData::fromTorrentUrl($title, $download['url'], $seeds, $resolution);
+
+        return new ProviderResult(
+            ProviderType::provider($this->providerInformation->getName()),
+            $torrentData,
+            $this->extractFeedSize($itemNode, $fields, $attributes, $description) ?? new Size(0)
+        );
+    }
+
+    /**
+     * @return array{type: string, url: string}|null
+     */
+    private function extractFeedDownload(
+        string $title,
+        array $links,
+        array $fields,
+        array $attributes,
+        string $description,
+        string $baseUrl
+    ): ?array {
+        foreach ($links as $link) {
+            if (str_starts_with($link, 'magnet:')) {
+                return ['type' => 'magnet', 'url' => $link];
+            }
+        }
+
+        if (preg_match('/magnet:\?[^"\'<>\s]+/i', $description, $m)) {
+            return ['type' => 'magnet', 'url' => $m[0]];
+        }
+
+        $infoHash = $fields['infohash'] ?? $fields['info_hash'] ?? $fields['hash'] ?? $attributes['infohash'] ?? null;
+        if ($infoHash === null) {
+            foreach (array_merge($links, [$this->htmlToText($description)]) as $text) {
+                if (preg_match('/(?<![0-9a-f])([0-9a-f]{40})(?![0-9a-f])/i', $text, $m)) {
+                    $infoHash = $m[1];
+                    break;
+                }
+            }
+        }
+        if ($infoHash !== null && preg_match('/^[0-9a-f]{40}$/i', $infoHash)) {
+            return [
+                'type' => 'magnet',
+                'url' => sprintf('magnet:?xt=urn:btih:%s&dn=%s', strtoupper($infoHash), rawurlencode($title)),
+            ];
+        }
+
+        foreach ($links as $link) {
+            if (str_ends_with(strtolower(parse_url($link, PHP_URL_PATH) ?? ''), '.torrent')) {
+                return ['type' => 'torrent', 'url' => $this->resolveUrl($link, $baseUrl)];
+            }
+        }
+
+        return null;
+    }
+
+    private function extractFeedSize(\DOMElement $itemNode, array $fields, array $attributes, string $description): ?Size
+    {
+        $enclosureLength = '';
+        foreach ($itemNode->getElementsByTagName('enclosure') as $enclosure) {
+            $enclosureLength = $enclosure->getAttribute('length');
+        }
+
+        foreach ([$fields['size'] ?? '', $fields['contentlength'] ?? '', $attributes['size'] ?? '', $enclosureLength] as $value) {
+            if ($value === '') {
+                continue;
+            }
+            if (ctype_digit($value) && (int) $value > 0) {
+                return new Size((float) $value);
+            }
+            $size = $this->parseSizeFromText($value);
+            if ($size !== null) {
+                return $size;
+            }
+        }
+
+        return $this->parseSizeFromText($this->htmlToText($description));
     }
 
     // =========================================================================
@@ -241,6 +342,7 @@ class GenericProvider implements Provider
         });
 
         if ($bestTable !== null && $bestScore >= 6) {
+            $this->seedColumnIndex = $this->detectSeedColumnIndex($bestTable);
             $rows = [];
             $bestTable->filter('tr')->each(function (Crawler $tr) use (&$rows) {
                 // Skip header rows (no <td> children)
@@ -299,6 +401,26 @@ class GenericProvider implements Provider
         }
 
         return [];
+    }
+
+    /**
+     * Finds the seeders column from the table header (<th> cells, or <td> cells of a <thead>).
+     */
+    private function detectSeedColumnIndex(Crawler $table): ?int
+    {
+        $headerCells = $table->filter('thead th, thead td');
+        if ($headerCells->count() === 0) {
+            $headerCells = $table->filter('tr')->reduce(fn(Crawler $tr) => $tr->filter('th')->count() > 1)->first()->filter('th');
+        }
+
+        foreach ($headerCells as $index => $cell) {
+            $text = trim(preg_replace('/\s+/u', ' ', $cell->textContent));
+            if (preg_match(self::SEED_HEADER_REGEX, $text)) {
+                return $index;
+            }
+        }
+
+        return null;
     }
 
     // =========================================================================
@@ -488,9 +610,27 @@ class GenericProvider implements Provider
      */
     private function extractSeeds(Crawler $row): int
     {
-        $candidates = [];
+        if ($this->seedColumnIndex !== null && $row->nodeName() === 'tr') {
+            $cells = $row->filter('td');
+            if ($cells->count() > $this->seedColumnIndex) {
+                $text = str_replace([',', '.', ' '], '', trim($cells->eq($this->seedColumnIndex)->text()));
+                if (preg_match('/^\d{1,7}$/', $text)) {
+                    return (int) $text;
+                }
+            }
+        }
 
-        $row->filter('td, th, span, div')->each(function (Crawler $cell) use (&$candidates) {
+        $candidates = [];
+        $rowNode = $row->getNode(0);
+
+        $row->filter('td, th, span, div')->each(function (Crawler $cell) use (&$candidates, $rowNode) {
+            // Numbers inside links are part of the title (e.g. a year), not a seeder count
+            for ($node = $cell->getNode(0)->parentNode; $node !== null && $node !== $rowNode; $node = $node->parentNode) {
+                if ($node->nodeName === 'a') {
+                    return;
+                }
+            }
+
             $text = trim($cell->text());
 
             // Must be a clean integer (1–6 digits)
@@ -573,6 +713,15 @@ class GenericProvider implements Provider
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * Strips tags while keeping a space where they were, so "file.mkv<br>39.21GB" does not
+     * become "file.mkv39.21GB" (which SIZE_REGEX rejects).
+     */
+    private function htmlToText(string $html): string
+    {
+        return trim(preg_replace('/\s+/u', ' ', strip_tags(preg_replace('/<[^>]*>/', ' $0 ', $html))));
     }
 
     // =========================================================================
