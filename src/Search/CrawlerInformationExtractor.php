@@ -43,7 +43,7 @@ trait CrawlerInformationExtractor
         return $magnetNodes->first()->attr('href');
     }
 
-    private function fileGetContentsCurl(string $url): string
+    private function fileGetContentsCurl(string $url, bool $failOnHttpError = false): string
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -53,11 +53,20 @@ trait CrawlerInformationExtractor
         curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // A provider that does not answer within these delays (seconds) is considered down
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 20);
         $data = curl_exec($ch);
+        $error = curl_error($ch);
+        $httpCode = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
         curl_close($ch);
 
         if (false === $data) {
-            throw new \UnexpectedValueException("$url is unreachable");
+            throw new \UnexpectedValueException(sprintf('%s is unreachable (%s)', $url, $error));
+        }
+
+        if ($failOnHttpError && $httpCode >= 400) {
+            throw new \UnexpectedValueException(sprintf('%s answered HTTP %d', $url, $httpCode));
         }
 
         if (false !== strpos($data, 'Please turn JavaScript on and reload the page.')) {
