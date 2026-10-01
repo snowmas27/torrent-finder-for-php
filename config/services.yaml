@@ -51,6 +51,14 @@ parameters:
       name: "bt4g"
       searchUrl: "https://bt4gprx.com/search?q=%s&page=rss"
       class: TorrentFinder\Provider\GenericProvider
+    oxtorrent:
+      name: "oxtorrent"
+      searchUrl: "https://www.oxtorrent.co/recherche/%s"
+      class: TorrentFinder\Provider\Oxtorrent
+    torrent911:
+      name: "torrent911"
+      searchUrl: "https://www.torrent911.app/recherche/%s"
+      class: TorrentFinder\Provider\Torrent911
 services:
   # default configuration for services in *this* file
   _defaults:
